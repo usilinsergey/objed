@@ -83,11 +83,9 @@ endif(MSVC)
 # Find Packages
 # -----------------------------------------------------------------------
 find_package(Qt5Core REQUIRED)
-find_package(Qt5Script REQUIRED)
 find_package(Qt5Widgets REQUIRED)
 find_package(Qt5Concurrent REQUIRED)
 include_directories(${Qt5Core_INCLUDE_DIRS})
-include_directories(${Qt5Script_INCLUDE_DIRS})
 include_directories(${Qt5Widgets_INCLUDE_DIRS})
 include_directories(${Qt5Concurrent_INCLUDE_DIRS})
 
