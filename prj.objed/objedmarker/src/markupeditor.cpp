@@ -41,6 +41,8 @@ either expressed or implied, of copyright holders.
 #include "markupeditor.h"
 #include "objedmarker.h"
 
+static const int minimumMouseEditableRectSize = 1;
+
 StarImageCommand::StarImageCommand(bool starred, ObjedMarkupEditor *editor) : 
 QUndoCommand(starred ? QObject::tr("Star Image") : QObject::tr("Unstar Image")), editor(editor), starred(starred)
 {
@@ -116,6 +118,8 @@ void ModifyObjectCommand::redo()
 void ModifyObjectCommand::undo()
 {
   editor->idealMarkup->modifyObject(newObject, oldObject);
+  if (oldObject.width() <= 1 || oldObject.height() <= 1)
+    editor->idealMarkup->removeObject(oldObject);
   editor->redraw();
 }
 IdealObjectItem::IdealObjectItem(const QRect &objectRect, 
@@ -149,7 +153,7 @@ RunObjectItem::~RunObjectItem()
 }
 
 ObjedMarkupEditor::ObjedMarkupEditor(QGraphicsScene *scene, QObject *parent) : 
-QObject(parent), scene(scene), selectedIdealObject(0), starItem(0), lockedItem(0), lockedStarState(false)
+QObject(parent), scene(scene), selectedIdealObject(0), starItem(0), lockedItem(0), lockedStarState(false), creatingItem(false)
 {
   scene->installEventFilter(this);
 
@@ -165,6 +169,8 @@ QObject(parent), scene(scene), selectedIdealObject(0), starItem(0), lockedItem(0
     ObjedMarkerObjectSizeDialog::defaultBaseObjectSize).toSize();
   lastObjectSize = settings.value("MarkupEditor/LastObjectSize",
     ObjedMarkerObjectSizeDialog::defaultBaseObjectSize).toSize();
+  baseObjectSizeEnabled = settings.value("MarkupEditor/BaseObjectSizeEnabled",
+    ObjedMarkerObjectSizeDialog::defaultBaseObjectSizeEnabled).toBool();
 
   idealObjectPenColor = settings.value("MarkupEditor/IdealObjectPenColor", 
     MarkupEditorPropertiesDialog::defaultIdealObjectPenColor).value<QColor>();
@@ -252,6 +258,7 @@ ObjedMarkupEditor::~ObjedMarkupEditor()
   settings.setValue("MarkupEditor/MaxumumObjectSize", maximumObjectSize);
   settings.setValue("MarkupEditor/BaseObjectSize", baseObjectSize);
   settings.setValue("MarkupEditor/LastObjectSize", lastObjectSize);
+  settings.setValue("MarkupEditor/BaseObjectSizeEnabled", baseObjectSizeEnabled);
 
   settings.setValue("MarkupEditor/IdealObjectPenColor", idealObjectPenColor);
   settings.setValue("MarkupEditor/IdealObjectBrushColor", idealObjectBrushColor);
@@ -369,6 +376,8 @@ void ObjedMarkupEditor::onResizeObjectAction()
 {
   if (selectedIdealObject == 0)
     return;
+  if (!baseObjectSizeEnabled && creatingItem)
+    return;
 
   qreal currScale = selectedIdealObject->scale();
   qreal currWidth = selectedIdealObject->rect().width() * currScale;
@@ -418,6 +427,7 @@ void ObjedMarkupEditor::onObjectSizePropertiesAction()
   objectSizeDialog.setBaseObjectSize(baseObjectSize);
   objectSizeDialog.setMinimumObjectSize(minimumObjectSize);
   objectSizeDialog.setMaximumObjectSize(maximumObjectSize);
+  objectSizeDialog.setBaseObjectSizeEnabled(baseObjectSizeEnabled);
   if (objectSizeDialog.exec() == QDialog::Rejected)
     return;
 
@@ -425,6 +435,7 @@ void ObjedMarkupEditor::onObjectSizePropertiesAction()
   minimumObjectSize = objectSizeDialog.minimumObjectSize();
   maximumObjectSize = objectSizeDialog.maximumObjectSize();
   lastObjectSize = baseObjectSize;
+  baseObjectSizeEnabled = objectSizeDialog.isBaseObjectSizeEnabled();
 }
 
 void ObjedMarkupEditor::onEditorPropertiesAction()
@@ -480,6 +491,13 @@ bool ObjedMarkupEditor::eventFilter(QObject *object, QEvent *event)
           mouseEvent->scenePos().y() - lastObjectSize.height() / 2.0,
           lastObjectSize.width(), lastObjectSize.height());
 
+        if (baseObjectSizeEnabled == false)
+        {
+          object = QRect(mouseEvent->scenePos().x(), mouseEvent->scenePos().y(), 
+            minimumMouseEditableRectSize, minimumMouseEditableRectSize);
+          creatingItem = true;
+        }
+
         if (item != 0 && item->type() == RunObjectItem::Type)
           object = qgraphicsitem_cast<RunObjectItem *>(item)->rect().toRect();
 
@@ -517,9 +535,17 @@ bool ObjedMarkupEditor::eventFilter(QObject *object, QEvent *event)
       if (selectedIdealObject == 0)
         return true;
 
-      QPointF deltaPos = mouseEvent->scenePos() - mouseEvent->lastScenePos();
-      selectedIdealObject->moveBy(deltaPos.x(), deltaPos.y());
-
+      if (baseObjectSizeEnabled == false && creatingItem == true)
+      {
+        QRectF rect = selectedIdealObject->rect();
+        selectedIdealObject->setRect(rect.x(), rect.y(), 
+          mouseEvent->scenePos().x() - rect.x(), mouseEvent->scenePos().y() - rect.y());        
+      }
+      else
+      {
+        QPointF deltaPos = mouseEvent->scenePos() - mouseEvent->lastScenePos();
+        selectedIdealObject->moveBy(deltaPos.x(), deltaPos.y());
+      }
       updateSelectedObjectLabel();
 
       return true;
@@ -540,14 +566,30 @@ bool ObjedMarkupEditor::eventFilter(QObject *object, QEvent *event)
 
       selectedIdealObject->setPen(QPen(selectedIdealObject->pen().color(), 
         selectedIdealObject->pen().width(), Qt::SolidLine));
-      selectedIdealObject = 0;
-
-      updateSelectedObjectLabel();
+      
+      if (creatingItem == true)
+      {
+        creatingItem = false;
+        oldObjectRect = QRect(oldObjectRect.x(), oldObjectRect.y(), minimumMouseEditableRectSize, minimumMouseEditableRectSize);
+        newObjectRect = newObjectRect.normalized();
+      }
 
       if (oldObjectRect != newObjectRect)
         undoStack.push(new ModifyObjectCommand(oldObjectRect, newObjectRect, this));
 
-      return true;
+      if (newObjectRect.size().width() < minimumObjectSize.width() || 
+        newObjectRect.size().height() < minimumObjectSize.height())
+      {
+        IdealObjectItem *objectItem = qgraphicsitem_cast<IdealObjectItem *>(selectedIdealObject);
+        QRect objectRect = objectItem->rect().translated(objectItem->pos()).toRect();
+        undoStack.push(new RemoveObjectCommand(objectRect, this));
+      }
+
+      selectedIdealObject = 0;
+
+      updateSelectedObjectLabel();
+
+      return true;    
     }
   }
   catch (ObjedException ex)

@@ -25,6 +25,9 @@
      <property name="title">
       <string>Base Object Size</string>
      </property>
+     <property name="checkable">
+      <bool>true</bool>
+     </property>
      <layout class="QHBoxLayout" name="objectSizeRatioLayout">
       <item>
        <widget class="QSpinBox" name="baseObjectWidth">

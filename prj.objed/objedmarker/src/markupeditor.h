@@ -185,6 +185,7 @@ private:
   QSize maximumObjectSize;
   QSize baseObjectSize;
   QSize lastObjectSize;
+  bool  baseObjectSizeEnabled;
 
 private:
   QGraphicsScene *scene;
@@ -194,6 +195,7 @@ private:
   
   bool lastStarred;
   bool lockedStarState;
+  bool creatingItem;
 
 private:
   QAction *undo, *redo;
