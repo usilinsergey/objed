@@ -589,6 +589,12 @@ void ObjedMarkupEditor::updateLockStarStateLabel()
   if (iconLabel == 0 || textLabel == 0)
     return;
 
+  const int sceneWidth = scene->sceneRect().width();
+  const int sceneHeight = scene->sceneRect().height();
+  const int minSceneSize = qMin(sceneWidth, sceneHeight);
+  const QSize lockSize(qMax(1, qRound(minSceneSize * 0.05)), qMax(1, qRound(minSceneSize * 0.05)));
+  const QPointF lockShift(sceneWidth - 2 * lockSize.width(), lockSize.height());
+
   delete lockedItem; lockedItem = 0;
 
   if (idealMarkup->isOpened() == true && lockedStarState == true)
@@ -598,8 +604,8 @@ void ObjedMarkupEditor::updateLockStarStateLabel()
 
     if (scene != 0 && repeatStar == true)
     {
-      lockedItem = scene->addPixmap(lockPixmap);
-      lockedItem->moveBy(48, 16);
+      lockedItem = scene->addPixmap(lockPixmap.scaled(lockSize, Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
+      lockedItem->moveBy(lockShift.x(), lockShift.y());
     }
   }
   else if (idealMarkup->isOpened() == true && lockedStarState == false)
@@ -609,8 +615,8 @@ void ObjedMarkupEditor::updateLockStarStateLabel()
 
     if (scene != 0 && repeatStar == true)
     {
-      lockedItem = scene->addPixmap(lockPixmap);
-      lockedItem->moveBy(48, 16);
+      lockedItem = scene->addPixmap(lockPixmap.scaled(lockSize, Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
+      lockedItem->moveBy(lockShift.x(), lockShift.y());
    }
   }
   else 
@@ -627,6 +633,12 @@ void ObjedMarkupEditor::updateStarImageLabel()
   if (iconLabel == 0 || textLabel == 0)
     return;
 
+  const int sceneWidth = scene->sceneRect().width();
+  const int sceneHeight = scene->sceneRect().height();
+  const int minSceneSize = qMin(sceneWidth, sceneHeight);
+  const QSize starSize(qMax(1, qRound(minSceneSize * 0.05)), qMax(1, qRound(minSceneSize * 0.05)));
+  const QPointF starShift(sceneWidth - 4 * starSize.width(), starSize.height());
+
   delete starItem; starItem = 0;
 
   if (idealMarkup->isOpened() == true && idealMarkup->isStarred() == true)
@@ -636,8 +648,8 @@ void ObjedMarkupEditor::updateStarImageLabel()
     
     if (scene != 0 && repeatStar == true)
     {
-      starItem = scene->addPixmap(starPixmap);
-      starItem->moveBy(16, 16);
+      starItem = scene->addPixmap(starPixmap.scaled(starSize, Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
+      starItem->moveBy(starShift.x(), starShift.y());
     }
   }
   else if (idealMarkup->isOpened() == true && idealMarkup->isStarred() == false)
@@ -647,8 +659,8 @@ void ObjedMarkupEditor::updateStarImageLabel()
 
     if (scene != 0 && repeatStar == true)
     {
-      starItem = scene->addPixmap(starPixmap);
-      starItem->moveBy(16, 16);
+      starItem = scene->addPixmap(starPixmap.scaled(starSize, Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
+      starItem->moveBy(starShift.x(), starShift.y());
     }
   }
   else 
