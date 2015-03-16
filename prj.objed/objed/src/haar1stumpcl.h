@@ -1,3 +1,4 @@
+/*
 Copyright (c) 2011-2013, Sergey Usilin. All rights reserved.
 
 All rights reserved.
@@ -26,3 +27,52 @@ ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 The views and conclusions contained in the software and documentation are those
 of the authors and should not be interpreted as representing official policies,
 either expressed or implied, of copyright holders.
+*/
+
+#pragma once
+#ifndef HAAR1STUMPCL_H_INCLUDED
+#define HAAR1STUMPCL_H_INCLUDED
+
+#include <objed/objed.h>
+#include <objed/objedutils.h>
+
+namespace objed
+{
+  class Haar1StumpClassifier : public Classifier
+  {
+    OBJED_TYPE("haar1StumpClassifier")
+    OBJED_DISABLE_COPY(Haar1StumpClassifier)
+
+  public:
+    Haar1StumpClassifier(int width, int height);
+    Haar1StumpClassifier(const Json::Value &data);
+    virtual ~Haar1StumpClassifier();
+
+  public:
+    virtual int width() const;
+    virtual int height() const;
+    virtual bool prepare(ImagePool *imagePool);
+    virtual bool evaluate(float *result, int x, int y) const;
+    virtual Json::Value serialize() const;
+    virtual Classifier * clone() const;
+
+  public:
+    inline int compute(const IplImage *integral, int x, int y) const
+    {
+      int x0 = x + rect.x, y0 = y + rect.y;
+      return rectAver(integral, x0, y0, rect.width, rect.height);
+    }
+
+  public:
+    const IplImage *integral;
+
+  public:
+    int clWidth, clHeight;
+    std::string preproc;
+    float values[2];
+    Rect<int> rect;
+    int threshold;
+  };
+}
+
+#endif  // HAAR1STUMPCL_H_INCLUDED

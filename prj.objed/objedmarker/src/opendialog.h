@@ -1,3 +1,4 @@
+/*
 Copyright (c) 2011-2013, Sergey Usilin. All rights reserved.
 
 All rights reserved.
@@ -26,3 +27,39 @@ ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 The views and conclusions contained in the software and documentation are those
 of the authors and should not be interpreted as representing official policies,
 either expressed or implied, of copyright holders.
+*/
+
+#pragma once
+#ifndef OPENDIALOG_H_INCLUDED
+#define OPENDIALOG_H_INCLUDED
+
+#include <QFileDialog>
+#include <QCompleter>
+#include <QLineEdit>
+
+class ObjedMarkerOpenDialog : public QFileDialog
+{
+  Q_OBJECT
+  Q_DISABLE_COPY(ObjedMarkerOpenDialog)
+
+public:
+  ObjedMarkerOpenDialog(QWidget *parent = 0);
+  virtual ~ObjedMarkerOpenDialog();
+
+public slots:
+  QString datasetPath() const;
+  QString idealMarkupName() const;
+  QString runMarkupName() const;
+
+private slots:
+  void updateCompleter(const QString &path);
+  void saveSettings();
+
+private:
+  bool dialogAdjusted;
+  QLineEdit *idealMarkupNameLine;
+  QLineEdit *runMarkupNameLine;
+  QCompleter *completer;
+};
+
+#endif  // OPENDIALOG_H_INCLUDED

@@ -1,0 +1,13 @@
+/* Template filled out by CMake */
+
+#pragma once
+#ifndef OBJECONF_H_INCLUDED
+#define OBJECONF_H_INCLUDED
+
+#cmakedefine OBJED_USE_OPENCV
+#cmakedefine OBJED_USE_OPENMP
+
+#define OBJED_MAJOR_VERSION @OBJED_MAJOR_VERSION@
+#define OBJED_MINOR_VERSION @OBJED_MINOR_VERSION@
+
+#endif  // OBJECONF_H_INCLUDED

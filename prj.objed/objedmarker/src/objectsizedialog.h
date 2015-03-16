@@ -1,3 +1,4 @@
+/*
 Copyright (c) 2011-2013, Sergey Usilin. All rights reserved.
 
 All rights reserved.
@@ -26,3 +27,40 @@ ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 The views and conclusions contained in the software and documentation are those
 of the authors and should not be interpreted as representing official policies,
 either expressed or implied, of copyright holders.
+*/
+
+#pragma once
+#ifndef OBJECTSIZEDIALOG_H_INCLUDED
+#define OBJECTSIZEDIALOG_H_INCLUDED
+
+#include "ui_objectsizedialog.h"
+
+class ObjedMarkerObjectSizeDialog : public QDialog, public Ui::ObjedMarkerObjectSizeDialog
+{
+  Q_OBJECT
+  Q_DISABLE_COPY(ObjedMarkerObjectSizeDialog)
+
+public:
+  ObjedMarkerObjectSizeDialog(QWidget *parent = 0);
+  virtual ~ObjedMarkerObjectSizeDialog();
+
+public:
+  static const QSize defaultBaseObjectSize;
+  static const QSize defaultMinimumObjectSize;
+  static const QSize defaultMaximumObjectSize;
+
+public:
+  void setBaseObjectSize(const QSize &size);
+  void setMinimumObjectSize(const QSize &size);
+  void setMaximumObjectSize(const QSize &size);
+
+public:
+  QSize baseObjectSize() const;
+  QSize minimumObjectSize() const;
+  QSize maximumObjectSize() const;
+
+private slots:
+  void restoreDefaults();
+};
+
+#endif  // OBJECTSIZEDIALOG_H_INCLUDED

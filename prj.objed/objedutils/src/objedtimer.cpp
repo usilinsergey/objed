@@ -1,3 +1,4 @@
+/*
 Copyright (c) 2011-2013, Sergey Usilin. All rights reserved.
 
 All rights reserved.
@@ -26,3 +27,55 @@ ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 The views and conclusions contained in the software and documentation are those
 of the authors and should not be interpreted as representing official policies,
 either expressed or implied, of copyright holders.
+*/
+
+#include <objedutils/objedtimer.h>
+
+#ifdef WIN32
+#  include <windows.h>
+#else  // WIN32
+#  include <ctime>
+#endif // WIN32
+
+ObjedTimer::ObjedTimer() : startClock(0)
+{
+  startClock = clock();
+}
+
+ObjedTimer::~ObjedTimer()
+{
+  return;
+}
+
+void ObjedTimer::restart()
+{
+  startClock = clock();
+}
+
+float ObjedTimer::elapsed()
+{
+  long long stopClock = clock();
+  return (stopClock - startClock + 0.0f) / clockPerSecond();
+}
+
+long long ObjedTimer::clock()
+{
+#ifdef WIN32
+  LARGE_INTEGER t = {0};
+  QueryPerformanceCounter(&t);
+  return t.QuadPart;
+#else  // WIN32
+  return clock();
+#endif // WIN32
+}
+
+long long ObjedTimer::clockPerSecond()
+{
+#ifdef WIN32
+  LARGE_INTEGER t = {0};
+  QueryPerformanceFrequency(&t);
+  return t.QuadPart;
+#else  // WIN32
+  return CLOCKS_PER_SEC;
+#endif // WIN32
+}

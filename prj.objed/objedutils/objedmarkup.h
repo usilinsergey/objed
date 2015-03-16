@@ -1,3 +1,4 @@
+/*
 Copyright (c) 2011-2013, Sergey Usilin. All rights reserved.
 
 All rights reserved.
@@ -26,3 +27,47 @@ ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 The views and conclusions contained in the software and documentation are those
 of the authors and should not be interpreted as representing official policies,
 either expressed or implied, of copyright holders.
+*/
+
+#pragma once
+#ifndef OBJEDMARKUP_H_INCLUDED
+#define OBJEDMARKUP_H_INCLUDED
+
+#include <QString>
+#include <QList>
+#include <QRect>
+
+class ObjedMarkup
+{
+  Q_DISABLE_COPY(ObjedMarkup)
+
+public:
+  ObjedMarkup(bool autoSave = true);
+  ObjedMarkup(const QString &markupPath, bool autoSave = true);
+  virtual ~ObjedMarkup();
+
+public:
+  void open(const QString &markupPath);
+  void save(const QString &markupPath = QString());
+  void close();
+
+public:
+  void setStarred(bool starred);
+  void appendObject(const QRect &object);
+  void removeObject(const QRect &object);
+  void modifyObject(const QRect &oldObject, const QRect &newObject);
+
+public:
+  bool isOpened() const;
+
+public:
+  bool isStarred() const;
+  QList<QRect> objects() const;
+
+private:
+  bool autoSave, starred;
+  QList<QRect> objectList;
+  QString markupPath;
+};
+
+#endif  // OBJEDMARKUP_H_INCLUDED

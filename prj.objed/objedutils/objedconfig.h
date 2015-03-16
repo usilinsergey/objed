@@ -1,3 +1,4 @@
+/*
 Copyright (c) 2011-2013, Sergey Usilin. All rights reserved.
 
 All rights reserved.
@@ -26,3 +27,43 @@ ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 The views and conclusions contained in the software and documentation are those
 of the authors and should not be interpreted as representing official policies,
 either expressed or implied, of copyright holders.
+*/
+
+#pragma once
+#ifndef OBJEDCONFIG_H_INCLUDED
+#define OBJEDCONFIG_H_INCLUDED
+
+#include <QByteArray>
+#include <QVariant>
+#include <QString>
+#include <QHash>
+#include <QList>
+
+class ObjedConfig
+{
+public:
+  ObjedConfig();
+  virtual ~ObjedConfig();
+
+public:
+  bool parseConfig(const QString &configPath);
+  bool saveTemplate(const QString &templatePath) const;
+  QByteArray generateTemplate() const;
+
+public:
+  void registerValue(const QString &name, const QString &description = QString(), const QVariant &default = QVariant());
+  void registerListValue(const QString &name, const QString &description = QString(), const QVariantList &default = QVariantList());
+  
+public:
+  QVariant value(const QString &name);
+  QVariantList listValue(const QString &name);
+
+private:
+  QList<QString> valuesOrder;
+  QList<QString> listValuesOrder;
+  QHash<QString, QVariant> values;
+  QHash<QString, QVariantList> listValues;
+  QHash<QString, QString> descriptions;
+};
+
+#endif  // OBJEDCONFIG_H_INCLUDED

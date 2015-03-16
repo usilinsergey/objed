@@ -1,3 +1,4 @@
+/*
 Copyright (c) 2011-2013, Sergey Usilin. All rights reserved.
 
 All rights reserved.
@@ -26,3 +27,30 @@ ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 The views and conclusions contained in the software and documentation are those
 of the authors and should not be interpreted as representing official policies,
 either expressed or implied, of copyright holders.
+*/
+
+#pragma once
+#ifndef OBJEDOPENMP_H_INCLUDED
+#define OBJEDOPENMP_H_INCLUDED
+#include <QSharedPointer>
+#include <QVector>
+
+namespace objed
+{
+  class Classifier;
+  class Detector;
+}
+
+struct ObjedOpenMP
+{
+  static int maxThreadCount();
+  static int threadId();
+
+  typedef QVector<QSharedPointer<objed::Classifier> > ClassifierList;
+  static ClassifierList multiplyClassifier(const objed::Classifier *classifier);
+
+  typedef QVector<QSharedPointer<objed::Detector> > DetectorList;
+  static DetectorList multiplyDetector(const objed::Detector *detector);
+};
+
+#endif  // OBJEDOPENMP_H_INCLUDED

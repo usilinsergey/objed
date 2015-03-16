@@ -1,3 +1,4 @@
+/*
 Copyright (c) 2011-2013, Sergey Usilin. All rights reserved.
 
 All rights reserved.
@@ -26,3 +27,49 @@ ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 The views and conclusions contained in the software and documentation are those
 of the authors and should not be interpreted as representing official policies,
 either expressed or implied, of copyright holders.
+*/
+
+#pragma once
+#ifndef MULTIDET_H_INCLUDED
+#define MULTIDET_H_INCLUDED
+
+#include <objed/objed.h>
+#include <objed/objedutils.h>
+
+#include <utility>
+#include <vector>
+
+namespace objed
+{
+  class MultiDetector : public Detector
+  {
+    OBJED_TYPE("multiDetector")
+    OBJED_DISABLE_COPY(MultiDetector)
+
+  public:
+    MultiDetector();
+    MultiDetector(const Json::Value &data, const std::string &workDir);
+    virtual ~MultiDetector();
+
+  public:
+    virtual DetectionList detect(IplImage *image);
+
+    virtual Detector * clone() const;
+
+    virtual void setImagePool(objed::ImagePool *extImagePool);
+    virtual void resetImagePool();
+
+  private:
+    ImagePool *imagePool;
+    bool isImagePoolOwn;
+
+  private:
+    std::vector<objed::Detector *> detectorList;
+
+  private:
+    bool mergeIncluded;
+    double overlap;
+  };
+}
+
+#endif  // MULTIDET_H_INCLUDED

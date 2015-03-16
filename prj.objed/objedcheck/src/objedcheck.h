@@ -1,3 +1,4 @@
+/*
 Copyright (c) 2011-2013, Sergey Usilin. All rights reserved.
 
 All rights reserved.
@@ -26,3 +27,63 @@ ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 The views and conclusions contained in the software and documentation are those
 of the authors and should not be interpreted as representing official policies,
 either expressed or implied, of copyright holders.
+*/
+
+#pragma once
+#ifndef OBJEDCHECK_H_INCLUDED
+#define OBJEDCHECK_H_INCLUDED
+
+#include <QSharedPointer>
+#include <QElapsedTimer>
+#include <QMainWindow>
+#include <QList>
+#include <QDir>
+
+#include "ui_objedcheck.h"
+
+namespace objed
+{
+  class Detector;
+}
+
+class ImageViewDock;
+class ObjedClusterer;
+
+class ObjedCheck : public QMainWindow, public Ui::ObjedCheck
+{
+  Q_OBJECT
+
+public:
+  ObjedCheck(QWidget *parent = 0, Qt::WindowFlags flags = 0);
+  virtual ~ObjedCheck();
+
+private slots:
+  void onOpenImageAction();
+  void onOpenImageDirAction();
+  void onOpenImageViewAction();
+  void onChangeImageAction();
+  void onRefreshAction();
+  void onAboutAction();
+
+private slots:
+  void onChooseDetectorClicked();
+  void onClearDetectorClicked();
+
+private slots:
+  void refreshTimer();
+  void info(const QString &msg);
+  void error(const QString &msg);
+
+private slots:
+  void updateDetectorSettings();
+  void processImage(const QString &imageName);
+  bool eventFilter(QObject *object, QEvent *event);
+
+private:
+  QList<ImageViewDock *> imageViewList;
+  QSharedPointer<objed::Detector> detector;
+  QElapsedTimer timer;
+  QDir imageDir;
+};
+
+#endif  // OBJEDCHECK_H_INCLUDED

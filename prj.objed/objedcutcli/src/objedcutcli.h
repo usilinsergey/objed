@@ -1,3 +1,4 @@
+/*
 Copyright (c) 2011-2013, Sergey Usilin. All rights reserved.
 
 All rights reserved.
@@ -26,3 +27,21 @@ ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 The views and conclusions contained in the software and documentation are those
 of the authors and should not be interpreted as representing official policies,
 either expressed or implied, of copyright holders.
+*/
+
+#pragma once
+#ifndef OBJEDCUTCLI_H_INCLUDED
+#define OBJEDCUTCLI_H_INCLUDED
+
+#include <QStringList>
+#include <QObject>
+
+#include <objedutils/objedconfig.h>
+
+class ObjedCutCLI
+{
+public:
+  int main(ObjedConfig *config);
+};
+
+#endif  // OBJEDCUTCLI_H_INCLUDED

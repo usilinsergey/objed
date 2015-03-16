@@ -1,3 +1,4 @@
+/*
 Copyright (c) 2011-2013, Sergey Usilin. All rights reserved.
 
 All rights reserved.
@@ -26,3 +27,51 @@ ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 The views and conclusions contained in the software and documentation are those
 of the authors and should not be interpreted as representing official policies,
 either expressed or implied, of copyright holders.
+*/
+
+#pragma once
+#ifndef YSCALEDET_H_INClUDED
+#define YSCALEDET_H_INClUDED
+
+#include <objed/objed.h>
+#include <objed/objedutils.h>
+
+namespace objed
+{
+  class YScaleDetector : public Detector
+  {
+    OBJED_TYPE("yScaleDetector")
+    OBJED_DISABLE_COPY(YScaleDetector)
+
+  public:
+    YScaleDetector();
+    YScaleDetector(const Json::Value &data, const std::string &workDir);
+    virtual ~YScaleDetector();
+
+  public:
+    virtual DetectionList detect(IplImage *image);
+
+    virtual Detector * clone() const;
+
+    virtual void setImagePool(objed::ImagePool *extImagePool);
+    virtual void resetImagePool();
+
+  private:
+    ImagePool *imagePool;
+    bool isImagePoolOwn;
+
+  private:
+    Classifier *classifier;
+
+  private:
+    double y0, y1, yStp;
+    double y0Scale, y1Scale;
+    int leftMargin, rightMargin;
+    int topMargin, bottomMargin;
+    int xStep, yStep;
+    bool mergeIncluded;
+    double overlap;
+  };
+}
+
+#endif  // YSCALEDET_H_INClUDED

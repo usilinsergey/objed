@@ -1,3 +1,4 @@
+/*
 Copyright (c) 2011-2013, Sergey Usilin. All rights reserved.
 
 All rights reserved.
@@ -26,3 +27,29 @@ ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 The views and conclusions contained in the software and documentation are those
 of the authors and should not be interpreted as representing official policies,
 either expressed or implied, of copyright holders.
+*/
+
+#pragma once
+#ifndef OBJEDIO_H_INCLUDED
+#define OBJEDIO_H_INCLUDED
+
+#include <QSharedPointer>
+#include <QFileInfo>
+#include <QString>
+#include <QList>
+
+namespace objed
+{
+  class Classifier;
+  class Detector;
+}
+
+struct ObjedIO
+{
+  static QSharedPointer<objed::Classifier> loadClassifier(const QString &classifierPath);
+  static void saveClassifier(const objed::Classifier *classifier, const QString &classifierPath);
+
+  static QSharedPointer<objed::Detector> loadDetector(const QString &detectorPath);
+};
+
+#endif  // OBJEDIO_H_INCLUDED

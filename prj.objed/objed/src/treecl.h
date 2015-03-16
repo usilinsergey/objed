@@ -1,3 +1,4 @@
+/*
 Copyright (c) 2011-2013, Sergey Usilin. All rights reserved.
 
 All rights reserved.
@@ -26,3 +27,45 @@ ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 The views and conclusions contained in the software and documentation are those
 of the authors and should not be interpreted as representing official policies,
 either expressed or implied, of copyright holders.
+*/
+
+#pragma once
+#ifndef TREECL_H_INCLUDED
+#define TREECL_H_INCLUDED
+
+#include <objed/objed.h>
+#include <objed/objedutils.h>
+
+namespace objed
+{
+  class TreeClassifier : public Classifier
+  {
+    OBJED_TYPE("treeClassifier")
+    OBJED_DISABLE_COPY(TreeClassifier)
+
+  public:
+    TreeClassifier(int width, int height);
+    TreeClassifier(const Json::Value &data);
+    virtual ~TreeClassifier();
+
+  public:
+    virtual int width() const;
+    virtual int height() const;
+    virtual bool prepare(ImagePool *imagePool);
+    virtual bool evaluate(float *result, int x, int y) const;
+    virtual Json::Value serialize() const;
+    virtual Classifier * clone() const;
+
+  private:
+    bool evaluateBoth(float *result, int x, int y) const;
+    bool evaluateLeft(float *result, int x, int y) const;
+    bool evaluateRight(float *result, int x, int y) const;
+    bool evaluateNone(float *result, int x, int y) const;
+
+  public:
+    int clWidth, clHeight;
+    Classifier *centralCl, *leftCl, *rightCl;
+  };
+}
+
+#endif  // TREECL_H_INCLUDED

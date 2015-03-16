@@ -1,3 +1,4 @@
+/*
 Copyright (c) 2011-2013, Sergey Usilin. All rights reserved.
 
 All rights reserved.
@@ -26,3 +27,49 @@ ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 The views and conclusions contained in the software and documentation are those
 of the authors and should not be interpreted as representing official policies,
 either expressed or implied, of copyright holders.
+*/
+
+#pragma once
+#ifndef PARALLELCL_H_INCLUDED
+#define PARALLELCL_H_INCLUDED
+
+#include <objed/objed.h>
+#include <objed/objedutils.h>
+
+#include <vector>
+
+namespace objed
+{
+  class ParallelClassifier : public Classifier
+  {
+    OBJED_TYPE("parallelClassifier")
+    OBJED_DISABLE_COPY(ParallelClassifier)
+
+  public:
+    ParallelClassifier(int width, int height);
+    ParallelClassifier(const Json::Value &data);
+    virtual ~ParallelClassifier();
+
+  public:
+    virtual int width() const;
+    virtual int height() const;
+    virtual bool prepare(ImagePool *imagePool);
+    virtual bool evaluate(float *result, int x, int y) const;
+    virtual Json::Value serialize() const;
+    virtual Classifier * clone() const;
+
+  private:
+    bool evaluate1(float *result, int x, int y) const;
+    bool evaluate2(float *result, int x, int y) const;
+    bool evaluate3(float *result, int x, int y) const;
+    bool evaluate4(float *result, int x, int y) const;
+    bool evaluate5(float *result, int x, int y) const;
+    bool evaluateN(float *result, int x, int y) const;
+
+  public:
+    int clWidth, clHeight;
+    std::vector<Classifier *> clList;
+  };
+}
+
+#endif  // PARALLELCL_H_INCLUDED

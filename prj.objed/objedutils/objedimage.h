@@ -1,3 +1,4 @@
+/*
 Copyright (c) 2011-2013, Sergey Usilin. All rights reserved.
 
 All rights reserved.
@@ -26,3 +27,45 @@ ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 The views and conclusions contained in the software and documentation are those
 of the authors and should not be interpreted as representing official policies,
 either expressed or implied, of copyright holders.
+*/
+
+
+#pragma once
+#ifndef OBJEDIMAGE_H_INCLUDED
+#define OBJEDIMAGE_H_INCLUDED
+
+#include <objedutils/objedconf.h>
+
+#include <opencv/cv.h>
+
+#include <QString>
+#include <QPixmap>
+#include <QImage>
+
+class ObjedImage
+{
+public:
+  virtual int width() const = 0;
+  virtual int height() const = 0;
+  virtual bool isEmpty() const = 0;
+
+public:
+  virtual void resize(const QSize &size) = 0;
+  virtual void gammaCorrection(double gamma) = 0;
+
+public:
+  virtual void save(const QString &imagePath) const = 0;
+  virtual QPixmap toQPixmap() const = 0;
+
+public:
+  virtual IplImage * image() const = 0;
+
+public:
+  virtual ~ObjedImage() {}
+
+public:
+  static QSharedPointer<ObjedImage> create(const QString &imagePath);
+  static QSharedPointer<ObjedImage> create(ObjedImage *source, const QRect &rect);
+};
+
+#endif  // OBJEDIMAGE_H_INCLUDED

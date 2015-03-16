@@ -1,3 +1,4 @@
+/*
 Copyright (c) 2011-2013, Sergey Usilin. All rights reserved.
 
 All rights reserved.
@@ -26,3 +27,40 @@ ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 The views and conclusions contained in the software and documentation are those
 of the authors and should not be interpreted as representing official policies,
 either expressed or implied, of copyright holders.
+*/
+
+#pragma once
+#ifndef OBJEDRUNUTILS_H_INCLUDED
+#define OBJEDRUNUTILS_H_INCLUDED
+
+#include <objedutils/objedcompare.h>
+#include <objedutils/objedmarkup.h>
+#include <objedutils/objedconfig.h>
+#include <objedutils/objedconf.h>
+
+#include <objed/objedutils.h>
+#include <objed/objed.h>
+
+class ObjedRunProcessor
+{
+public:
+  ObjedRunProcessor(ObjedConfig *config);
+  virtual ~ObjedRunProcessor();
+
+public:
+  void processDataset(const QString &datasetPath);
+  void printTotalStatistics();
+
+private:
+  QSharedPointer<objed::Detector> detector;
+  ObjedCompare::Result totalResult;
+
+  QString idealMarkupName;
+  QString realMarkupName;
+  bool saveRealMarkup;
+
+  double threshold;
+  int minPower;
+};
+
+#endif  // OBJEDRUNUTILS_H_INCLUDED

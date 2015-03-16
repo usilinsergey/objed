@@ -1,3 +1,4 @@
+/*
 Copyright (c) 2011-2013, Sergey Usilin. All rights reserved.
 
 All rights reserved.
@@ -26,3 +27,53 @@ ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 The views and conclusions contained in the software and documentation are those
 of the authors and should not be interpreted as representing official policies,
 either expressed or implied, of copyright holders.
+*/
+
+#pragma once
+#ifndef SIMPLEDET_H_INCLUDED
+#define SIMPLEDET_H_INCLUDED
+
+#include <objed/objed.h>
+#include <objed/objedutils.h>
+
+#include <utility>
+#include <vector>
+
+namespace objed
+{
+  class SimpleDetector : public Detector
+  {
+    OBJED_TYPE("simpleDetector")
+    OBJED_DISABLE_COPY(SimpleDetector)
+
+  public:
+    SimpleDetector();
+    SimpleDetector(const Json::Value &data, const std::string &workDir);
+    virtual ~SimpleDetector();
+
+  public:
+    virtual DetectionList detect(IplImage *image);
+
+    virtual Detector * clone() const;
+
+    virtual void setImagePool(objed::ImagePool *extImagePool);
+    virtual void resetImagePool();
+
+  private:
+    ImagePool *imagePool;
+    bool isImagePoolOwn;
+
+  private:
+    Classifier *classifier;
+
+  private:
+    double minScale, maxScale, stpScale;
+    int leftMargin, rightMargin;
+    int topMargin, bottomMargin;
+    int xStep, yStep;
+    bool mergeIncluded;
+    double overlap;
+  };
+}
+
+#endif  // SIMPLEDET_H_INCLUDED

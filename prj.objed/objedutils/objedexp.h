@@ -1,3 +1,4 @@
+/*
 Copyright (c) 2011-2013, Sergey Usilin. All rights reserved.
 
 All rights reserved.
@@ -26,3 +27,29 @@ ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 The views and conclusions contained in the software and documentation are those
 of the authors and should not be interpreted as representing official policies,
 either expressed or implied, of copyright holders.
+*/
+
+#pragma once
+#ifndef OBJEDEXP_H_INCLUDED
+#define OBJEDEXP_H_INCLUDED
+
+#include <QException>
+#include <QString>
+
+class ObjedException : public QException
+{
+public:
+  ObjedException();
+  ObjedException(const QString &msg);
+  virtual ~ObjedException() throw ();
+
+public:
+  virtual void raise() const;
+  virtual QException * clone() const;
+  virtual QString details() const;
+
+private:
+  QString msg;
+};
+
+#endif  // OBJEDEXP_H_INCLUDED

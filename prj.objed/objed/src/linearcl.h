@@ -1,3 +1,4 @@
+/*
 Copyright (c) 2011-2013, Sergey Usilin. All rights reserved.
 
 All rights reserved.
@@ -26,3 +27,42 @@ ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 The views and conclusions contained in the software and documentation are those
 of the authors and should not be interpreted as representing official policies,
 either expressed or implied, of copyright holders.
+*/
+
+#pragma once
+#ifndef LINEARCL_H_INCLUDED
+#define LINEARCL_H_INCLUDED
+
+#include <objed/objed.h>
+#include <objed/objedutils.h>
+
+#include <vector>
+
+namespace objed
+{
+  class LinearClassifier : public Classifier
+  {
+    OBJED_TYPE("linearClassifier")
+    OBJED_DISABLE_COPY(LinearClassifier)
+
+  public:
+    LinearClassifier(int width, int height);
+    LinearClassifier(const Json::Value &data);
+    virtual ~LinearClassifier();
+
+  public:
+    virtual int width() const;
+    virtual int height() const;
+    virtual bool prepare(ImagePool *imagePool);
+    virtual bool evaluate(float *result, int x, int y) const;
+    virtual Json::Value serialize() const;
+    virtual Classifier * clone() const;
+
+  public:
+    int clWidth, clHeight;
+    std::vector<Classifier *> clList;
+    std::vector<float> alphaList;
+  };
+}
+
+#endif  // LINEARCL_H_INCLUDED

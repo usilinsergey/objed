@@ -1,0 +1,14 @@
+<RCC>
+  <qresource prefix="mainIcon">
+    <file alias="objedcheck">objedcheck.png</file>
+  </qresource>
+  <qresource prefix="actionIcons">
+    <file alias="openImage">folder_image.png</file>
+    <file alias="about">help.png</file>
+    <file alias="firstImage">resultset_first.png</file>
+    <file alias="lastImage">resultset_last.png</file>
+    <file alias="nextImage">resultset_next.png</file>
+    <file alias="previousImage">resultset_previous.png</file>
+    <file alias="redrawImage">update.png</file>
+  </qresource>
+</RCC>

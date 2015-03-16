@@ -1,3 +1,4 @@
+/*
 Copyright (c) 2011-2013, Sergey Usilin. All rights reserved.
 
 All rights reserved.
@@ -26,3 +27,38 @@ ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 The views and conclusions contained in the software and documentation are those
 of the authors and should not be interpreted as representing official policies,
 either expressed or implied, of copyright holders.
+*/
+
+#include <objedutils/objedconsole.h>
+#include <objedutils/objedconfig.h>
+#include <objedutils/objedexp.h>
+#include <objedutils/objedio.h>
+
+#include "objedrunutils.h"
+#include "objedruncli.h"
+
+int ObjedRunCLI::main(ObjedConfig *config)
+{
+  QString logPath = config->value("LogPath").toString();
+  if (logPath.isEmpty() == false) ObjedConsole::setLogPath(logPath);
+
+  try
+  {
+    ObjedRunProcessor processor(config);
+
+    QVariantList datasetList = config->listValue("DatasetList");
+    if (datasetList.isEmpty() == true) 
+      throw ObjedException("Dataset list is empty");
+
+    foreach (QVariant dataset, datasetList)
+      processor.processDataset(dataset.toString());
+
+    processor.printTotalStatistics();
+  }
+  catch (ObjedException ex)
+  {
+    ObjedConsole::printError(ex.details());
+  }
+
+  return 0;
+}

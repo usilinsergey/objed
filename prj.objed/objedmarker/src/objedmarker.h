@@ -1,3 +1,4 @@
+/*
 Copyright (c) 2011-2013, Sergey Usilin. All rights reserved.
 
 All rights reserved.
@@ -26,3 +27,56 @@ ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 The views and conclusions contained in the software and documentation are those
 of the authors and should not be interpreted as representing official policies,
 either expressed or implied, of copyright holders.
+*/
+
+#pragma once
+#ifndef OBJEDMARKER_H_INCLUDED
+#define OBJEDMARKER_H_INCLUDED
+
+#include <QGraphicsPixmapItem>
+#include <QDir>
+
+#include "ui_objedmarker.h"
+#include "markupeditor.h"
+
+class ObjedMarker : public QMainWindow, public Ui::ObjedMarker
+{
+  Q_OBJECT
+
+public:
+  ObjedMarker(QWidget *parent = 0, Qt::WindowFlags flags = 0);
+  virtual ~ObjedMarker();
+
+private slots:
+  void onOpenDatasetAction();
+  void onGoImageAction();
+  void onGoDifferenceAction();
+  void onRedrawImageAction();
+  void onAboutAction();
+  
+private slots:
+  void onImageChanged();
+
+private slots:
+  void onGammaChanged();
+
+private slots:
+  void onCompareThresholdChanged();
+
+private:
+  void setupMarkupEditor();
+  void setupMenuActions();
+  void setupStatusBar();
+
+private:
+  QLabel *datasetDirLabel;
+  QLabel *idealMarkupNameLabel;
+  QLabel *runMarkupNameLabel;
+
+private:
+  ObjedMarkupEditor *markupEditor;
+  QString idealMarkupName, runMarkupName;
+  QDir datasetDir;
+};
+
+#endif	// OBJEDMARKER_H_INCLUDED

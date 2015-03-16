@@ -1,3 +1,4 @@
+/*
 Copyright (c) 2011-2013, Sergey Usilin. All rights reserved.
 
 All rights reserved.
@@ -26,3 +27,62 @@ ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 The views and conclusions contained in the software and documentation are those
 of the authors and should not be interpreted as representing official policies,
 either expressed or implied, of copyright holders.
+*/
+
+#pragma once
+#ifndef IMAGEPOOL_H_INCLUDED
+#define IMAGEPOOL_H_INCLUDED
+
+#include <objed/objed.h>
+
+#include <string>
+#include <vector>
+#include <map>
+
+namespace objed
+{
+  class ImagePoolItem
+  {
+  public:
+    ImagePoolItem();
+    virtual ~ImagePoolItem();
+
+  private:
+    ImagePoolItem(const ImagePoolItem &);
+    ImagePoolItem &operator=(const ImagePoolItem &);
+
+  public:
+    IplImage * image(int width, int height, int channels, int depth);
+    IplImage * image() const;
+
+  private:
+    IplImage *regionImage, *sourceImage;
+  };
+
+  class ImagePoolImpl : public ImagePool
+  {
+  public:
+    ImagePoolImpl();
+    virtual ~ImagePoolImpl();
+
+  private:
+    ImagePoolImpl(const ImagePoolImpl &);
+    ImagePoolImpl &operator=(const ImagePoolImpl &);
+
+  public:
+    virtual bool update(IplImage *image);
+    virtual IplImage *integral(const std::string &id);
+    virtual IplImage *image(const std::string &id);
+    virtual IplImage *base();
+
+    virtual std::vector<std::string> imageNames() const;
+    virtual std::vector<std::string> integralNames() const;
+
+  private:
+    ImagePoolItem *baseItem;
+    std::map<std::string, ImagePoolItem *> imageItems;
+    std::map<std::string, ImagePoolItem *> integralItems;
+  };
+}
+
+#endif  // IMAGEPOOL_H_INCLUDED

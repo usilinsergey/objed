@@ -1,3 +1,4 @@
+/*
 Copyright (c) 2011-2013, Sergey Usilin. All rights reserved.
 
 All rights reserved.
@@ -26,3 +27,23 @@ ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 The views and conclusions contained in the software and documentation are those
 of the authors and should not be interpreted as representing official policies,
 either expressed or implied, of copyright holders.
+*/
+
+#include <QApplication>
+
+#include <objedutils/objedsys.h>
+
+#include "objedcheck.h"
+
+int main(int argc, char* argv[])
+{
+  QApplication app(argc, argv);
+  app.setOrganizationName("Objed");
+  app.setApplicationName("ObjedCheck");
+  app.setApplicationVersion(ObjedSys::version());
+
+  ObjedCheck gui(0, 0);
+  gui.show();
+
+  return app.exec();
+}

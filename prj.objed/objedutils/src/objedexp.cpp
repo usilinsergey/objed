@@ -1,3 +1,4 @@
+/*
 Copyright (c) 2011-2013, Sergey Usilin. All rights reserved.
 
 All rights reserved.
@@ -26,3 +27,37 @@ ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 The views and conclusions contained in the software and documentation are those
 of the authors and should not be interpreted as representing official policies,
 either expressed or implied, of copyright holders.
+*/
+
+#include <objedutils/objedexp.h>
+
+
+ObjedException::ObjedException()
+{
+  return;
+}
+
+ObjedException::ObjedException(const QString &msg) : msg(msg)
+{
+  return;
+}
+
+ObjedException::~ObjedException() throw ()
+{
+  return;
+}
+
+void ObjedException::raise() const
+{
+  throw *this;
+}
+
+QString ObjedException::details() const
+{
+  return msg;
+}
+
+QException * ObjedException::clone() const
+{
+  return new ObjedException(msg);
+}

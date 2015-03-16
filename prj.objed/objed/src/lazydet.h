@@ -1,3 +1,4 @@
+/*
 Copyright (c) 2011-2013, Sergey Usilin. All rights reserved.
 
 All rights reserved.
@@ -26,3 +27,54 @@ ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 The views and conclusions contained in the software and documentation are those
 of the authors and should not be interpreted as representing official policies,
 either expressed or implied, of copyright holders.
+*/
+
+#pragma once
+#ifndef LAZYDET_H_INCLUDED
+#define LAZYDET_H_INCLUDED
+
+#include <objed/objed.h>
+#include <objed/objedutils.h>
+
+#include <utility>
+#include <vector>
+
+namespace objed
+{
+  class LazyDetector : public Detector
+  {
+    OBJED_TYPE("lazyDetector")
+    OBJED_DISABLE_COPY(LazyDetector)
+
+  public:
+    LazyDetector();
+    LazyDetector(const Json::Value &data, const std::string &workDir);
+    virtual ~LazyDetector();
+
+  public:
+    virtual DetectionList detect(IplImage *image);
+
+    virtual Detector * clone() const;
+
+    virtual void setImagePool(objed::ImagePool *extImagePool);
+    virtual void resetImagePool();
+
+  private:
+    ImagePool *imagePool;
+    bool isImagePoolOwn;
+
+  private:
+    Classifier *classifier;
+
+  private:
+    double minScale, maxScale, stpScale;
+    int leftMargin, rightMargin;
+    int topMargin, bottomMargin;
+    int xRawStep, yRawStep;
+    int xStep, yStep;
+    bool mergeIncluded;
+    double overlap;
+  };
+}
+
+#endif  // LAZYDET_H_INCLUDED

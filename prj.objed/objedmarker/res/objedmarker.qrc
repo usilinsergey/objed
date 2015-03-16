@@ -1,0 +1,25 @@
+<RCC>
+  <qresource prefix="mainIcon">
+    <file alias="objedmarker">objedmarker.png</file>
+  </qresource>
+  <qresource prefix="actionIcons">
+    <file alias="previousDifference">resultset_previousq.png</file>
+    <file alias="nextDifference">resultset_nextq.png</file>
+    <file alias="editor">editor.png</file>
+    <file alias="redo">redo.png</file>
+    <file alias="undo">undo.png</file>
+    <file alias="lockStarState">lock_star.png</file>
+    <file alias="objectSize">resize.png</file>
+    <file alias="redrawImage">update.png</file>
+    <file alias="starImage">star.png</file>
+    <file alias="increaseObject">add.png</file>
+    <file alias="decreaseObject">delete.png</file>
+    <file alias="about">help.png</file>
+    <file alias="firstImage">resultset_first.png</file>
+    <file alias="lastImage">resultset_last.png</file>
+    <file alias="nextImage">resultset_next.png</file>
+    <file alias="previousImage">resultset_previous.png</file>
+    <file alias="openMarkup">folder_database.png</file>
+    <file alias="openImages">folder_image.png</file>
+  </qresource>
+</RCC>

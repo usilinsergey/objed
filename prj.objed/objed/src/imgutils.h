@@ -1,3 +1,4 @@
+/*
 Copyright (c) 2011-2013, Sergey Usilin. All rights reserved.
 
 All rights reserved.
@@ -26,3 +27,40 @@ ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 The views and conclusions contained in the software and documentation are those
 of the authors and should not be interpreted as representing official policies,
 either expressed or implied, of copyright holders.
+*/
+
+#pragma once
+#ifndef IMGUTILS_H_INCLUDED
+#define IMGUTILS_H_INCLUDED
+
+#include <objed/objedutils.h>
+#include <objed/objed.h>
+
+namespace objed
+{
+  // gray
+  void PrepareGrayImage(IplImage *grayImage, IplImage *image);
+
+  // saturation
+  void PrepareSaturationImage(IplImage *saturationImage, IplImage *image);
+
+  // channel<channel>
+  void PrepareChannelImage(IplImage *channelImage, IplImage *image, int channel);
+
+  // gradient<direction>, direction: 0 - all, 1 - straight, 2 - diagonal
+  void PrepareGradientImage(IplImage *gradientImage, IplImage *grayImage, int direction);
+
+  // canny<direction>, direction: 0 - all, 1 - straight, 2 - diagonal
+  void PrepareCannyImage(IplImage *cannyImage, IplImage *grayImage, int direction);
+
+  // rawCanny
+  void PrepareRawCannyImage(IplImage *rawCannyImage, IplImage *grayImage);
+
+  // filter<index>
+  void PrepareFilterImage(IplImage *filterImage, IplImage *grayImage, int index);
+
+  // noSalt
+  void PrepareNoSaltImage(IplImage *noSaltImage, IplImage *grayImage);
+}
+
+#endif  // IMGUTILS_H_INCLUDED

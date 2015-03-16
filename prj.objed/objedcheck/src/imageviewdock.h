@@ -1,3 +1,4 @@
+/*
 Copyright (c) 2011-2013, Sergey Usilin. All rights reserved.
 
 All rights reserved.
@@ -26,3 +27,44 @@ ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 The views and conclusions contained in the software and documentation are those
 of the authors and should not be interpreted as representing official policies,
 either expressed or implied, of copyright holders.
+*/
+
+#pragma once
+#ifndef IMAGEVIEWDOCK_H_INCLUDED
+#define IMAGEVIEWDOCK_H_INCLUDED
+
+#include <QDialogButtonBox>
+#include <QGraphicsView>
+#include <QResizeEvent>
+#include <QDockWidget>
+#include <QWidget>
+
+namespace objed
+{
+  class ImagePool;
+}
+
+class ImageViewDock : public QDockWidget
+{
+  Q_OBJECT
+
+public:
+  ImageViewDock(QWidget *parent = 0, Qt::WindowFlags flags = 0);
+  virtual ~ImageViewDock();
+
+public slots:
+  void setImageView(const QString &id);
+  void refreshImageView(objed::ImagePool *imagePool);
+
+protected:
+  void resizeEvent(QResizeEvent *event);
+
+private:
+  QWidget *centralWidget;
+  QGraphicsView *preview;
+
+private:
+  QString imageId;
+};
+
+#endif  // IMAGEVIEWDOCK_H_INCLUDED

@@ -1,3 +1,4 @@
+/*
 Copyright (c) 2011-2013, Sergey Usilin. All rights reserved.
 
 All rights reserved.
@@ -26,3 +27,23 @@ ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 The views and conclusions contained in the software and documentation are those
 of the authors and should not be interpreted as representing official policies,
 either expressed or implied, of copyright holders.
+*/
+
+#pragma once
+#ifndef OBJEDSYS_H_INCLUDED
+#define OBJEDSYS_H_INCLUDED
+
+#include <QStringList>
+#include <QString>
+#include <QObject>
+#include <QDir>
+
+struct ObjedSys
+{
+  static QDir rootDir();
+  static QString version();
+  static QString resolvePath(const QString &path);
+  static QStringList imageFilters();
+};
+
+#endif  // OBJEDSYS_H_INCLUDED

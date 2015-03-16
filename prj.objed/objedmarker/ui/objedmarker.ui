@@ -1,0 +1,715 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>ObjedMarker</class>
+ <widget class="QMainWindow" name="ObjedMarker">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>800</width>
+    <height>600</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>ObjedMarker</string>
+  </property>
+  <property name="windowIcon">
+   <iconset resource="../res/objedmarker.qrc">
+    <normaloff>:/mainIcon/objedmarker</normaloff>:/mainIcon/objedmarker</iconset>
+  </property>
+  <property name="iconSize">
+   <size>
+    <width>16</width>
+    <height>16</height>
+   </size>
+  </property>
+  <widget class="QWidget" name="centralWidget">
+   <layout class="QHBoxLayout" name="horizontalLayout">
+    <item>
+     <widget class="QGraphicsView" name="graphicsView"/>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+  <widget class="QDockWidget" name="editorInfoDock">
+   <property name="windowTitle">
+    <string>Editor Info</string>
+   </property>
+   <attribute name="dockWidgetArea">
+    <number>1</number>
+   </attribute>
+   <widget class="QWidget" name="objectPropertiesContents">
+    <layout class="QFormLayout" name="editorInfoLayout">
+     <item row="0" column="0">
+      <widget class="QLabel" name="starImageLabel">
+       <property name="minimumSize">
+        <size>
+         <width>120</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="font">
+        <font>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>Star Image:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0">
+      <widget class="QLabel" name="lockStarStateLabel">
+       <property name="minimumSize">
+        <size>
+         <width>120</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="font">
+        <font>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>Lock Star State:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="0">
+      <widget class="QLabel" name="selectedObjectLabel">
+       <property name="minimumSize">
+        <size>
+         <width>120</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="font">
+        <font>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>Selected Object:</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+  </widget>
+  <widget class="QDockWidget" name="adjustImageDock">
+   <property name="windowTitle">
+    <string>Adjust Image</string>
+   </property>
+   <attribute name="dockWidgetArea">
+    <number>1</number>
+   </attribute>
+   <widget class="QWidget" name="adjustImageContents">
+    <layout class="QFormLayout" name="formLayout">
+     <property name="fieldGrowthPolicy">
+      <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
+     </property>
+     <item row="0" column="0">
+      <widget class="QLabel" name="gammaLabel">
+       <property name="minimumSize">
+        <size>
+         <width>120</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="font">
+        <font>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>Gamma:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <layout class="QHBoxLayout" name="gammaLayout">
+       <item>
+        <widget class="QSlider" name="gammaSlider">
+         <property name="maximum">
+          <number>100</number>
+         </property>
+         <property name="value">
+          <number>10</number>
+         </property>
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QDoubleSpinBox" name="gammaBox">
+         <property name="correctionMode">
+          <enum>QAbstractSpinBox::CorrectToNearestValue</enum>
+         </property>
+         <property name="decimals">
+          <number>1</number>
+         </property>
+         <property name="minimum">
+          <double>0.000000000000000</double>
+         </property>
+         <property name="maximum">
+          <double>10.000000000000000</double>
+         </property>
+         <property name="singleStep">
+          <double>0.100000000000000</double>
+         </property>
+         <property name="value">
+          <double>1.000000000000000</double>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+    </layout>
+   </widget>
+  </widget>
+  <widget class="QDockWidget" name="compareDock">
+   <property name="windowTitle">
+    <string>Compare Markup</string>
+   </property>
+   <attribute name="dockWidgetArea">
+    <number>1</number>
+   </attribute>
+   <widget class="QWidget" name="dockWidgetContents">
+    <layout class="QFormLayout" name="formLayout_2">
+     <item row="0" column="0">
+      <widget class="QLabel" name="compareThresholdLabel">
+       <property name="minimumSize">
+        <size>
+         <width>120</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="font">
+        <font>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>Threshold:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <layout class="QHBoxLayout" name="compareThresholdLayout">
+       <item>
+        <widget class="QSlider" name="compareThresholdSlider">
+         <property name="maximum">
+          <number>10</number>
+         </property>
+         <property name="pageStep">
+          <number>1</number>
+         </property>
+         <property name="value">
+          <number>5</number>
+         </property>
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QDoubleSpinBox" name="compareThresholdBox">
+         <property name="correctionMode">
+          <enum>QAbstractSpinBox::CorrectToNearestValue</enum>
+         </property>
+         <property name="decimals">
+          <number>1</number>
+         </property>
+         <property name="minimum">
+          <double>0.000000000000000</double>
+         </property>
+         <property name="maximum">
+          <double>1.000000000000000</double>
+         </property>
+         <property name="singleStep">
+          <double>0.100000000000000</double>
+         </property>
+         <property name="value">
+          <double>0.500000000000000</double>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+    </layout>
+   </widget>
+  </widget>
+  <widget class="QDockWidget" name="imageListDock">
+   <property name="windowTitle">
+    <string>Image List</string>
+   </property>
+   <attribute name="dockWidgetArea">
+    <number>1</number>
+   </attribute>
+   <widget class="QWidget" name="imageListContents">
+    <layout class="QVBoxLayout" name="imageListLayout">
+     <item>
+      <widget class="QListWidget" name="imageList">
+       <property name="editTriggers">
+        <set>QAbstractItemView::NoEditTriggers</set>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>800</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="fileMenu">
+    <property name="title">
+     <string>&amp;File</string>
+    </property>
+    <addaction name="openDatasetAction"/>
+    <addaction name="separator"/>
+    <addaction name="exitAction"/>
+   </widget>
+   <widget class="QMenu" name="navigateMenu">
+    <property name="title">
+     <string>&amp;Navigate</string>
+    </property>
+    <addaction name="nextImageAction"/>
+    <addaction name="previousImageAction"/>
+    <addaction name="firstImageAction"/>
+    <addaction name="lastImageAction"/>
+    <addaction name="separator"/>
+    <addaction name="nextDifferenceAction"/>
+    <addaction name="previousDifferenceAction"/>
+    <addaction name="showAllDifferencesAction"/>
+    <addaction name="separator"/>
+    <addaction name="redrawImageAction"/>
+   </widget>
+   <widget class="QMenu" name="helpMenu">
+    <property name="title">
+     <string>&amp;Help</string>
+    </property>
+    <addaction name="aboutAction"/>
+   </widget>
+   <widget class="QMenu" name="viewMenu">
+    <property name="title">
+     <string>View</string>
+    </property>
+   </widget>
+   <widget class="QMenu" name="editMenu">
+    <property name="title">
+     <string>&amp;Edit</string>
+    </property>
+   </widget>
+   <widget class="QMenu" name="optionsMenu">
+    <property name="title">
+     <string>&amp;Options</string>
+    </property>
+   </widget>
+   <addaction name="fileMenu"/>
+   <addaction name="editMenu"/>
+   <addaction name="navigateMenu"/>
+   <addaction name="optionsMenu"/>
+   <addaction name="viewMenu"/>
+   <addaction name="helpMenu"/>
+  </widget>
+  <action name="openDatasetAction">
+   <property name="icon">
+    <iconset resource="../res/objedmarker.qrc">
+     <normaloff>:/actionIcons/openImages</normaloff>:/actionIcons/openImages</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Open Dataset...</string>
+   </property>
+  </action>
+  <action name="exitAction">
+   <property name="text">
+    <string>E&amp;xit</string>
+   </property>
+  </action>
+  <action name="nextImageAction">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../res/objedmarker.qrc">
+     <normaloff>:/actionIcons/nextImage</normaloff>:/actionIcons/nextImage</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Next Image</string>
+   </property>
+  </action>
+  <action name="previousImageAction">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../res/objedmarker.qrc">
+     <normaloff>:/actionIcons/previousImage</normaloff>:/actionIcons/previousImage</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Previous Image</string>
+   </property>
+  </action>
+  <action name="firstImageAction">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../res/objedmarker.qrc">
+     <normaloff>:/actionIcons/firstImage</normaloff>:/actionIcons/firstImage</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;First Image</string>
+   </property>
+  </action>
+  <action name="lastImageAction">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../res/objedmarker.qrc">
+     <normaloff>:/actionIcons/lastImage</normaloff>:/actionIcons/lastImage</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Last Image</string>
+   </property>
+  </action>
+  <action name="aboutAction">
+   <property name="icon">
+    <iconset resource="../res/objedmarker.qrc">
+     <normaloff>:/actionIcons/about</normaloff>:/actionIcons/about</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;About ObjedMarker</string>
+   </property>
+  </action>
+  <action name="redrawImageAction">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../res/objedmarker.qrc">
+     <normaloff>:/actionIcons/redrawImage</normaloff>:/actionIcons/redrawImage</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Redraw Image</string>
+   </property>
+   <property name="toolTip">
+    <string>Redraw Image</string>
+   </property>
+  </action>
+  <action name="nextDifferenceAction">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../res/objedmarker.qrc">
+     <normaloff>:/actionIcons/nextDifference</normaloff>:/actionIcons/nextDifference</iconset>
+   </property>
+   <property name="text">
+    <string>Next Difference</string>
+   </property>
+  </action>
+  <action name="previousDifferenceAction">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../res/objedmarker.qrc">
+     <normaloff>:/actionIcons/previousDifference</normaloff>:/actionIcons/previousDifference</iconset>
+   </property>
+   <property name="text">
+    <string>Previous Difference</string>
+   </property>
+  </action>
+  <action name="showAllDifferencesAction">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>Show All Differences</string>
+   </property>
+  </action>
+ </widget>
+ <tabstops>
+  <tabstop>graphicsView</tabstop>
+  <tabstop>imageList</tabstop>
+ </tabstops>
+ <resources>
+  <include location="../res/objedmarker.qrc"/>
+ </resources>
+ <connections>
+  <connection>
+   <sender>openDatasetAction</sender>
+   <signal>triggered()</signal>
+   <receiver>ObjedMarker</receiver>
+   <slot>onOpenDatasetAction()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>399</x>
+     <y>299</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>aboutAction</sender>
+   <signal>triggered()</signal>
+   <receiver>ObjedMarker</receiver>
+   <slot>onAboutAction()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>399</x>
+     <y>299</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>imageList</sender>
+   <signal>currentTextChanged(QString)</signal>
+   <receiver>ObjedMarker</receiver>
+   <slot>onImageChanged()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>116</x>
+     <y>570</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>399</x>
+     <y>299</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>firstImageAction</sender>
+   <signal>triggered()</signal>
+   <receiver>ObjedMarker</receiver>
+   <slot>onGoImageAction()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>399</x>
+     <y>299</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>previousImageAction</sender>
+   <signal>triggered()</signal>
+   <receiver>ObjedMarker</receiver>
+   <slot>onGoImageAction()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>399</x>
+     <y>299</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>nextImageAction</sender>
+   <signal>triggered()</signal>
+   <receiver>ObjedMarker</receiver>
+   <slot>onGoImageAction()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>399</x>
+     <y>299</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>lastImageAction</sender>
+   <signal>triggered()</signal>
+   <receiver>ObjedMarker</receiver>
+   <slot>onGoImageAction()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>399</x>
+     <y>299</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>redrawImageAction</sender>
+   <signal>triggered()</signal>
+   <receiver>ObjedMarker</receiver>
+   <slot>onRedrawImageAction()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>399</x>
+     <y>299</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>exitAction</sender>
+   <signal>triggered()</signal>
+   <receiver>ObjedMarker</receiver>
+   <slot>close()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>399</x>
+     <y>299</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>gammaBox</sender>
+   <signal>valueChanged(double)</signal>
+   <receiver>ObjedMarker</receiver>
+   <slot>onGammaChanged()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>286</x>
+     <y>337</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>399</x>
+     <y>299</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>gammaSlider</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>ObjedMarker</receiver>
+   <slot>onGammaChanged()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>238</x>
+     <y>337</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>399</x>
+     <y>299</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>nextDifferenceAction</sender>
+   <signal>triggered()</signal>
+   <receiver>ObjedMarker</receiver>
+   <slot>onGoDifferenceAction()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>399</x>
+     <y>299</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>previousDifferenceAction</sender>
+   <signal>triggered()</signal>
+   <receiver>ObjedMarker</receiver>
+   <slot>onGoDifferenceAction()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>399</x>
+     <y>299</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>compareThresholdBox</sender>
+   <signal>valueChanged(double)</signal>
+   <receiver>ObjedMarker</receiver>
+   <slot>onCompareThresholdChanged()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>252</x>
+     <y>259</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>399</x>
+     <y>299</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>compareThresholdSlider</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>ObjedMarker</receiver>
+   <slot>onCompareThresholdChanged()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>180</x>
+     <y>259</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>399</x>
+     <y>299</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>onAboutAction()</slot>
+  <slot>onImageChanged()</slot>
+  <slot>onGoImageAction()</slot>
+  <slot>onOpenDatasetAction()</slot>
+  <slot>onRedrawImageAction()</slot>
+  <slot>onGammaChanged()</slot>
+  <slot>onBlackQuantileChanged()</slot>
+  <slot>onWhiteQuantileChanged()</slot>
+  <slot>onChooseColor()</slot>
+  <slot>onGoDifferenceAction()</slot>
+  <slot>onCompareThresholdChanged()</slot>
+ </slots>
+</ui>

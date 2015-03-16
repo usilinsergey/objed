@@ -1,3 +1,4 @@
+/*
 Copyright (c) 2011-2013, Sergey Usilin. All rights reserved.
 
 All rights reserved.
@@ -26,3 +27,30 @@ ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 The views and conclusions contained in the software and documentation are those
 of the authors and should not be interpreted as representing official policies,
 either expressed or implied, of copyright holders.
+*/
+
+#pragma once
+#ifndef OBJEDCONSOLE_H_INCLUDED
+#define OBJEDCONSOLE_H_INCLUDED
+
+#include <QTextStream>
+#include <QThread>
+#include <QTime>
+#include <QFile>
+
+struct ObjedConsole
+{
+  static void setLogPath(const QString &logPath);
+  static void printInfo(const QString &textLine);
+  static void printProgress(const QString &textLine, int progress);
+  static void printWarning(const QString &textLine);
+  static void printError(const QString &textLine);
+  static QString scanTextLine();
+
+private:
+  static bool needNewLineCharacter;
+  static QTextStream out, in, log;
+  static QFile logFile;
+};
+
+#endif  // OBJEDCONSOLE_H_INCLUDED

@@ -1,3 +1,4 @@
+/*
 Copyright (c) 2011-2013, Sergey Usilin. All rights reserved.
 
 All rights reserved.
@@ -26,3 +27,46 @@ ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 The views and conclusions contained in the software and documentation are those
 of the authors and should not be interpreted as representing official policies,
 either expressed or implied, of copyright holders.
+*/
+
+#pragma once
+#ifndef DATASETPROC_H_INCLUDED
+#define DATASETPROC_H_INCLUDED
+
+#include <QStringList>
+#include <QString>
+#include <QObject>
+
+#include <objed/objedutils.h>
+#include <objed/objed.h>
+
+#include "objedtrainutils.h"
+
+class ObjedConfig;
+class ObjedImage;
+
+class DatasetProcessor
+{
+  Q_DISABLE_COPY(DatasetProcessor)
+
+public:
+  DatasetProcessor(ObjedConfig *config);
+  virtual ~DatasetProcessor();
+
+public:
+  SampleList preparePositiveSamples(objed::Classifier *classifier);
+  SampleList prepareNegativeSamples(objed::Classifier *classifier);
+
+private:
+  QList<QSharedPointer<ObjedImage> > prepareImagePyramid(const QString &imagePath);
+  qint64 computePeriod(const QList<QSharedPointer<ObjedImage> > &imagePyramid);
+
+private:
+  QStringList positiveImagePathList;
+  QStringList negativeImagePathList;
+  int classifierWidth, classifierHeight;
+  double minScale, maxScale, stpScale;
+  int negativeCount;
+};
+
+#endif  // DATASETPROC_H_INCLUDED

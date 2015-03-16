@@ -1,3 +1,4 @@
+/*
 Copyright (c) 2011-2013, Sergey Usilin. All rights reserved.
 
 All rights reserved.
@@ -26,3 +27,35 @@ ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 The views and conclusions contained in the software and documentation are those
 of the authors and should not be interpreted as representing official policies,
 either expressed or implied, of copyright holders.
+*/
+
+#pragma once
+#ifndef OBJEDCOMPARE_H_INCLUDED
+#define OBJEDCOMPARE_H_INCLUDED
+
+#include <objedutils/objedmarkup.h>
+
+struct ObjedCompare
+{
+  struct Result
+  {
+    int truePositive;
+    int falsePositive;
+    int falseNegative;
+    int imageCount;
+
+    Result();
+    Result(int tp, int fp, int fn, int count = 1);
+    Result & operator+=(const Result &other);
+    Result operator+(const Result &other) const;
+    bool operator==(const Result &other) const;
+    bool operator!=(const Result &other) const;
+  };
+
+  static Result compare(const ObjedMarkup &realMarkup, 
+      const ObjedMarkup &idealMarkup, double threshold);
+};
+
+
+
+#endif  // OBJEDCOMPARE_H_INCLUDED
