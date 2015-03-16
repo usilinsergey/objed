@@ -36,7 +36,7 @@ either expressed or implied, of copyright holders.
 template<class T>
 inline static bool intervalContains(const objed::Interval<T> &interval, T value)
 {
-  return value >= interval.min && value <= interval.max;
+  return value >= interval.mn && value <= interval.mx;
 }
 
 objed::MeanClassifier::MeanClassifier(int width, int height) : 

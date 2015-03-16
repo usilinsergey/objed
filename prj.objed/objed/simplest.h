@@ -89,11 +89,11 @@ namespace objed
   template<class T> class Interval
   {
   public:
-    Interval<T>() : min(0), max(0) {}
-    Interval<T>(T min, T max) : min(min), max(max) {}
+    Interval<T>() : mn(0), mx(0) {}
+    Interval<T>(T mn, T mx) : mn(mn), mx(mx) {}
 
   public:
-    T min, max;
+    T mn, mx;
   };
 
   template<class T> class Cluster : public Rect<T>

@@ -80,8 +80,8 @@ namespace objed
   template<class T> Json::Value intervalToData(const Interval<T> &interval)
   {
     Json::Value data;
-    data["min"] = interval.min;
-    data["max"] = interval.max;
+    data["min"] = interval.mn;
+    data["max"] = interval.mx;
     return data;
   }
 
