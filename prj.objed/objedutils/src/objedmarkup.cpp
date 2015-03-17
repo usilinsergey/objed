@@ -128,6 +128,7 @@ void ObjedMarkup::save(const QString &markupPath)
 
 void ObjedMarkup::close()
 {
+  save();
   starred = false;
   objectList.clear();
   markupPath.clear();
