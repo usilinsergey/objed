@@ -99,7 +99,7 @@ static void updateIntegralItem(objed::ImagePoolItem *integralItem, IplImage *ima
     return;
 
   IplImage *integral = integralItem->image(image->width + 1, image->height + 1, image->nChannels, IPL_DEPTH_32S);
-  cvIntegralImage(image, integral);
+  cvIntegral(image, integral);
 }
 
 objed::ImagePoolItem::ImagePoolItem()
@@ -111,7 +111,7 @@ objed::ImagePoolItem::ImagePoolItem()
 objed::ImagePoolItem::~ImagePoolItem()
 {
   if (sourceImage->imageData != 0)
-    cvReleaseImageData(sourceImage);
+    cvReleaseData(sourceImage);
   cvReleaseImageHeader(&sourceImage);
   cvReleaseImageHeader(&regionImage);
 }
@@ -122,7 +122,7 @@ IplImage * objed::ImagePoolItem::image(int width, int height, int channels, int 
     sourceImage->depth != depth || sourceImage->nChannels != channels)
   {
     if (sourceImage->imageData != 0)
-      cvReleaseImageData(sourceImage);
+      cvReleaseData(sourceImage);
     IplImage *newSourceImage = cvCreateImage(cvSize(width, height), depth, channels);
     memcpy(sourceImage, newSourceImage, sourceImage->nSize);
     cvReleaseImageHeader(&newSourceImage);
@@ -166,7 +166,7 @@ objed::ImagePoolImpl::~ImagePoolImpl()
 
 bool objed::ImagePoolImpl::update(IplImage *image)
 {
-  cvCopyImage(image, baseItem->image(image->width, image->height, image->nChannels, image->depth));
+  cvCopy(image, baseItem->image(image->width, image->height, image->nChannels, image->depth));
 
   std::map<std::string, ImagePoolItem *>::iterator itImageItem;
   for (itImageItem = imageItems.begin(); itImageItem != imageItems.end(); ++itImageItem)

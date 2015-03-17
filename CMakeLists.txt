@@ -91,6 +91,7 @@ include_directories(${Qt5Concurrent_INCLUDE_DIRS})
 
 set(OpenCV_STATIC OFF)
 find_package(OpenCV REQUIRED)
+include_directories(${OpenCV_INCLUDE_DIRS})
 
 find_package(OpenMP REQUIRED)
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS}")

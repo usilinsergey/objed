@@ -97,7 +97,7 @@ void objed::PrepareGrayImage(IplImage *grayImage, IplImage *image)
   assert(grayImage != 0 && image != 0);
 
   if (grayImage->nChannels == image->nChannels)
-    cvCopyImage(image, grayImage);
+    cvCopy(image, grayImage);
   else
     cvCvtColor(image, grayImage, CV_RGB2GRAY);
 }
@@ -126,7 +126,7 @@ void objed::PrepareChannelImage(IplImage *channelImage, IplImage *image, int cha
   assert(channelImage != 0 && image != 0);
 
   cvSetImageCOI(image, channel + 1);
-  cvCopyImage(channelImage, image);
+  cvCopy(channelImage, image);
   cvSetImageCOI(image, 0);
 }
 
