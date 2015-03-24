@@ -123,7 +123,7 @@ void ObjedCutCutting::process(ObjedImage *image, const ObjedMarkup *markup, cons
 
       negativeCount++;
     }
-    else if (markup->objects().count() == 1)
+    else if (markup->objects().count() == 1 && markup->isStarred() == true)
     {
       const QRect object = markup->objects().first();
       const QRect topRect(0, 0, image->width(), object.y() + object.height() / 2);
