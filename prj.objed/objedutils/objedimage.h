@@ -52,6 +52,7 @@ public:
 public:
   virtual void resize(const QSize &size) = 0;
   virtual void gammaCorrection(double gamma) = 0;
+  virtual void rotate(double angle, const QColor &bg) = 0;
 
 public:
   virtual void save(const QString &imagePath) const = 0;

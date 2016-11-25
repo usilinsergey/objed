@@ -52,6 +52,7 @@ public:
 public:
   virtual void resize(const QSize &size);
   virtual void gammaCorrection(double gamma);
+  virtual void rotate(double angle, const QColor &bg);
 
 public:
   virtual void save(const QString &imagePath) const;
@@ -145,6 +146,19 @@ void ObjedImageImpl::gammaCorrection(double gamma)
   }
 }
 
+void ObjedImageImpl::rotate(double angle, const QColor &bg)
+{
+  cv::Mat mat_image(image_, false);
+  cv::Mat rotation_matrix = cv::getRotationMatrix2D(
+    cv::Point2f(mat_image.cols / 2, mat_image.rows / 2), angle, 1.0);
+  
+  cv::Mat rotated_mat_image;
+  cv::Scalar bg_scalar(bg.blue(), bg.green(), bg.red());
+  cv::warpAffine(mat_image, rotated_mat_image, rotation_matrix,
+    mat_image.size(), cv::INTER_LINEAR, cv::BORDER_CONSTANT, bg_scalar);
+
+  rotated_mat_image.copyTo(mat_image);
+}
 
 void ObjedImageImpl::save(const QString &imagePath) const
 {
@@ -160,7 +174,7 @@ QPixmap ObjedImageImpl::toQPixmap() const
   QImage::Format format = image_->nChannels == 1 ? QImage::Format_Indexed8 : QImage::Format_RGB888;
   QImage qImage((uchar *)image_->imageData, image_->width, image_->height, image_->widthStep, format);
 
-  return QPixmap::fromImage(qImage);
+  return QPixmap::fromImage(qImage.rgbSwapped());
 }
 
 IplImage * ObjedImageImpl::image() const
