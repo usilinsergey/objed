@@ -125,9 +125,8 @@ void objed::PrepareChannelImage(IplImage *channelImage, IplImage *image, int cha
 {
   assert(channelImage != 0 && image != 0);
 
-  cvSetImageCOI(image, channel + 1);
-  cvCopy(channelImage, image);
-  cvSetImageCOI(image, 0);
+  cv::Mat src(image, false), dst(channelImage, false);
+  cv::extractChannel(src, dst, channel);
 }
 
 void objed::PrepareGradientImage(IplImage *gradientImage, IplImage *grayImage, int direction)
