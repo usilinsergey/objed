@@ -32,8 +32,9 @@ either expressed or implied, of copyright holders.
 #include <objedutils/objedimage.h>
 #include <objedutils/objedexp.h>
 
-#include <opencv/highgui.h>
-#include <opencv/cv.h>
+#include <opencv2/core.hpp>
+#include <opencv2/highgui.hpp>
+#include <opencv2/imgproc.hpp>
 
 class ObjedImageImpl : public ObjedImage
 {
@@ -148,7 +149,7 @@ void ObjedImageImpl::gammaCorrection(double gamma)
 
 void ObjedImageImpl::rotate(double angle, const QColor &bg)
 {
-  cv::Mat mat_image(image_, false);
+  cv::Mat mat_image = cv::cvarrToMat(image_, false);
   cv::Mat rotation_matrix = cv::getRotationMatrix2D(
     cv::Point2f(mat_image.cols / 2, mat_image.rows / 2), angle, 1.0);
   

@@ -125,7 +125,8 @@ void objed::PrepareChannelImage(IplImage *channelImage, IplImage *image, int cha
 {
   assert(channelImage != 0 && image != 0);
 
-  cv::Mat src(image, false), dst(channelImage, false);
+  cv::Mat src = cv::cvarrToMat(image, false);
+  cv::Mat dst = cv::cvarrToMat(channelImage, false);
   cv::extractChannel(src, dst, channel);
 }
 
