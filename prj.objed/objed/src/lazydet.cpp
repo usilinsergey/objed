@@ -88,10 +88,17 @@ objed::LazyDetector::~LazyDetector()
   Classifier::destroy(classifier);
 }
 
-objed::DetectionList objed::LazyDetector::detect(IplImage *image)
+objed::DetectionList objed::LazyDetector::detect(IplImage *image, DebugInfo *debugInfo)
 {
   if (imagePool == 0 || classifier == 0 || image == 0)
     return DetectionList();
+
+  DebugInfo *clDebugInfo0 = 0, *clDebugInfo1 = 0;
+  if (debugInfo != nullptr)
+  {
+    clDebugInfo0 = new DebugInfo();
+    clDebugInfo1 = new DebugInfo();
+  }
 
   std::vector<Rect<int> > rawDetectionList;
   const int clWd = classifier->width(), clWd2 = clWd / 2;
@@ -112,8 +119,12 @@ objed::DetectionList objed::LazyDetector::detect(IplImage *image)
     {
       for (int x = clWd2; x < scaledImageWd - clWd2; x += xRawStep)
       {
+
+        if (clDebugInfo0 != nullptr)
+          clDebugInfo0->int_data.clear();
+
         float result = 0.0;
-        if (classifier->evaluate(&result, x, y) && result > 0)
+        if (classifier->evaluate(&result, x, y, clDebugInfo0) && result > 0)
         {
           int yMin = std::max(clHt2, y - yRawStep / 2), yMax = std::min(y + yRawStep / 2, scaledImageHt - clHt2);
           int xMin = std::max(clWd2, x - xRawStep / 2), xMax = std::min(x + xRawStep / 2, scaledImageWd - clWd2);
@@ -122,7 +133,10 @@ objed::DetectionList objed::LazyDetector::detect(IplImage *image)
           {
             for (int x0 = xMin; x0 < xMax; x0 += xStep)
             {
-              if (classifier->evaluate(&result, x0, y0) && result > 0)
+              if (clDebugInfo1 != nullptr)
+                clDebugInfo1->int_data.clear();
+
+              if (classifier->evaluate(&result, x0, y0, clDebugInfo1) && result > 0)
               {
                 Detection rawDetection;
                 rawDetection.power = 1;
@@ -132,14 +146,50 @@ objed::DetectionList objed::LazyDetector::detect(IplImage *image)
                 rawDetection.height = round((clHt - topMargin - bottomMargin) * scale);
                 rawDetectionList.push_back(rawDetection);
               }
+
+              if (debugInfo != nullptr)
+              {
+                int outputLevel = clDebugInfo1->int_data[Classifier::DBG_SC_COUNT];
+                if (debugInfo->int_data.find(Detector::DBG_MIN_SC_COUNT) != debugInfo->int_data.end())
+                  debugInfo->int_data[Detector::DBG_MIN_SC_COUNT] = std::min(outputLevel, debugInfo->int_data[Detector::DBG_MIN_SC_COUNT]);
+                else
+                  debugInfo->int_data[Detector::DBG_MIN_SC_COUNT] = outputLevel;
+                if (debugInfo->int_data.find(Detector::DBG_MAX_SC_COUNT) != debugInfo->int_data.end())
+                  debugInfo->int_data[Detector::DBG_MAX_SC_COUNT] = std::max(outputLevel, debugInfo->int_data[Detector::DBG_MAX_SC_COUNT]);
+                else
+                  debugInfo->int_data[Detector::DBG_MAX_SC_COUNT] = outputLevel;
+                debugInfo->int_data[Detector::DBG_TOTAL_SC_COUNT] += outputLevel;
+                debugInfo->int_data[Detector::DBG_EVALUATION_COUNT]++;
+              }
             }
           }
+        }
+
+        if (debugInfo != nullptr)
+        {
+          int outputLevel = clDebugInfo0->int_data[Classifier::DBG_SC_COUNT];
+          if (debugInfo->int_data.find(Detector::DBG_MIN_SC_COUNT) != debugInfo->int_data.end())
+            debugInfo->int_data[Detector::DBG_MIN_SC_COUNT] = std::min(outputLevel, debugInfo->int_data[Detector::DBG_MIN_SC_COUNT]);
+          else
+            debugInfo->int_data[Detector::DBG_MIN_SC_COUNT] = outputLevel;
+          if (debugInfo->int_data.find(Detector::DBG_MAX_SC_COUNT) != debugInfo->int_data.end())
+            debugInfo->int_data[Detector::DBG_MAX_SC_COUNT] = std::max(outputLevel, debugInfo->int_data[Detector::DBG_MAX_SC_COUNT]);
+          else
+            debugInfo->int_data[Detector::DBG_MAX_SC_COUNT] = outputLevel;
+          debugInfo->int_data[Detector::DBG_TOTAL_SC_COUNT] += outputLevel;
+          debugInfo->int_data[Detector::DBG_EVALUATION_COUNT]++;
         }
       }
     }
 
     cvReleaseImage(&scaledImage);
   }
+
+  if (clDebugInfo0 != nullptr)
+    delete clDebugInfo0;
+  if (clDebugInfo1 != nullptr)
+    delete clDebugInfo0;
+
 
   DetectionList clusteredDetectionList = objed::cluster(rawDetectionList, overlap);
   return mergeIncluded == true ? objed::mergeIncluded(clusteredDetectionList) : clusteredDetectionList;

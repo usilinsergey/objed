@@ -54,9 +54,10 @@ int main(int argc, char* argv[])
   config.registerValue("MinimumPower", "Specifies the minimum detection power",                                     QVariant(0));
   config.registerValue("IdealMarkupName", "Specifies the name of ideal object markup (the same as in objedmarker)", QVariant());
   config.registerValue("SaveRealMarkup", "Specifies whether real markup (run result) should be save or not",        QVariant(true));
+  config.registerValue("SaveDebugInfo", "Specifies whether debug info should be save or not",                       QVariant(false));
   config.registerValue("Threshold", "Specifies the comparison threshold between real and ideal objects",            QVariant(0.5));
   config.registerValue("LogPath", "Specifies the log path in canonized form (if empty log is not saved)",           QVariant());
-  config.registerListValue("DatasetList", "Specifies the list of markupped directories in canonized form",          QVariantList());
+  config.registerListValue("DatasetList", "Specifies the list of markuped directories in canonized form",          QVariantList());
 
   if (app.arguments().count() == 2)
   {

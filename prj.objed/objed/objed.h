@@ -36,7 +36,7 @@ either expressed or implied, of copyright holders.
 #include <objed/simplest.h>
 #include <json-cpp/json.h>
 
-#include <opencv/cv.h>
+#include <opencv2/core.hpp>
 
 namespace objed
 {
@@ -59,13 +59,22 @@ namespace objed
     static void destroy(ImagePool *&imagePool);
   };
 
+  class DebugInfo
+  {
+  public:
+    std::map<int, int> int_data;
+  };
+
   class Classifier
   {
+  public:
+    static const int DBG_SC_COUNT = 1;
+
   public:
     virtual int width() const = 0;
     virtual int height() const = 0;
     virtual bool prepare(ImagePool *imagePool) = 0;
-    virtual bool evaluate(float *result, int x, int y) const = 0;
+    virtual bool evaluate(float *result, int x, int y, DebugInfo *debugInfo = 0) const = 0;
     virtual Json::Value serialize() const = 0;
     virtual std::string type() const = 0;
     virtual Classifier * clone() const = 0;
@@ -86,7 +95,13 @@ namespace objed
   class Detector
   {
   public:
-    virtual DetectionList detect(IplImage *image) = 0;
+    static const int DBG_TOTAL_SC_COUNT    = 1001;
+    static const int DBG_MIN_SC_COUNT      = 1002;
+    static const int DBG_MAX_SC_COUNT      = 1003;
+    static const int DBG_EVALUATION_COUNT  = 1004;
+
+  public:
+    virtual DetectionList detect(IplImage *image, DebugInfo *debugInfo = 0) = 0;
     
     virtual std::string type() const = 0;
     virtual Detector * clone() const = 0;

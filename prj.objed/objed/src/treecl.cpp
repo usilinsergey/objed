@@ -85,16 +85,16 @@ bool objed::TreeClassifier::prepare(ImagePool *imagePool)
   return ok;
 }
 
-bool objed::TreeClassifier::evaluate(float *result, int x, int y) const
+bool objed::TreeClassifier::evaluate(float *result, int x, int y, DebugInfo *debugInfo) const
 {
   if (leftCl != 0 && rightCl != 0)
-    return evaluateBoth(result, x, y);
+    return evaluateBoth(result, x, y, debugInfo);
   else if (leftCl == 0 && rightCl != 0)
-    return evaluateRight(result, x, y);
+    return evaluateRight(result, x, y, debugInfo);
   else if (leftCl != 0 && rightCl == 0)
-    return evaluateLeft(result, x, y);
+    return evaluateLeft(result, x, y, debugInfo);
   else if (leftCl == 0 && rightCl == 0)
-    return evaluateNone(result, x, y);
+    return evaluateNone(result, x, y, debugInfo);
   else
     return false;
 }
@@ -129,33 +129,33 @@ objed::Classifier * objed::TreeClassifier::clone() const
   return newTreeCl;
 }
 
-bool objed::TreeClassifier::evaluateBoth(float *result, int x, int y) const
+bool objed::TreeClassifier::evaluateBoth(float *result, int x, int y, DebugInfo *debugInfo) const
 {
   assert(centralCl != 0 && leftCl != 0 && rightCl != 0);
 
-  bool ok = centralCl->evaluate(result, x, y);
-  return ok && (*result > 0 ? rightCl->evaluate(result, x, y) : leftCl->evaluate(result, x, y));
+  bool ok = centralCl->evaluate(result, x, y, debugInfo);
+  return ok && (*result > 0 ? rightCl->evaluate(result, x, y, debugInfo) : leftCl->evaluate(result, x, y, debugInfo));
 }
 
-bool objed::TreeClassifier::evaluateLeft(float *result, int x, int y) const
+bool objed::TreeClassifier::evaluateLeft(float *result, int x, int y, DebugInfo *debugInfo) const
 {
   assert(centralCl != 0 && leftCl != 0 && rightCl == 0);
 
-  bool ok = centralCl->evaluate(result, x, y);
-  return *result > 0 ? ok : (ok && leftCl->evaluate(result, x, y));
+  bool ok = centralCl->evaluate(result, x, y, debugInfo);
+  return *result > 0 ? ok : (ok && leftCl->evaluate(result, x, y, debugInfo));
 }
 
-bool objed::TreeClassifier::evaluateRight(float *result, int x, int y) const
+bool objed::TreeClassifier::evaluateRight(float *result, int x, int y, DebugInfo *debugInfo) const
 {
   assert(centralCl != 0 && leftCl == 0 && rightCl != 0);
 
-  bool ok = centralCl->evaluate(result, x, y);
-  return *result > 0 ? (ok && rightCl->evaluate(result, x, y)) : ok;
+  bool ok = centralCl->evaluate(result, x, y, debugInfo);
+  return *result > 0 ? (ok && rightCl->evaluate(result, x, y, debugInfo)) : ok;
 }
 
-bool objed::TreeClassifier::evaluateNone(float *result, int x, int y) const
+bool objed::TreeClassifier::evaluateNone(float *result, int x, int y, DebugInfo *debugInfo) const
 {
   assert(centralCl != 0 && leftCl == 0 && rightCl == 0);
 
-  return centralCl->evaluate(result, x, y);
+  return centralCl->evaluate(result, x, y, debugInfo);
 }

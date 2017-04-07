@@ -83,7 +83,7 @@ bool objed::Haar1PwClassifier::prepare(ImagePool *imagePool)
   return integral != 0;
 }
 
-bool objed::Haar1PwClassifier::evaluate(float *result, int x, int y) const
+bool objed::Haar1PwClassifier::evaluate(float *result, int x, int y, DebugInfo *debugInfo) const
 {
   *result = bins[compute(integral, x, y) * bins.size() / 256];
   return true;

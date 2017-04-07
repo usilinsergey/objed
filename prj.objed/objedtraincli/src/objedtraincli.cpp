@@ -306,7 +306,7 @@ int ObjedTrainCLI::trainTreeClassifier(ObjedConfig *config)
           QSharedPointer<ParityCascadeClassifier> parityCascade = buildParityCascade(tree.data(), label);
 
           SampleList positiveSamples = datasetProc.preparePositiveSamples(parityCascade.data());
-          if (positiveSamples.count() <= positiveSamplesThreshold)
+          if (positiveSamples.count() <= positiveSamplesThreshold && label.endsWith("lC"))
           {
             leaveList.append(label);
             throw ObjedException("Positive sample count is less than threshold value");

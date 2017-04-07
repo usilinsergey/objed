@@ -96,17 +96,17 @@ bool objed::CascadeClassifier::prepare(ImagePool *imagePool)
   return ok;
 }
 
-bool objed::CascadeClassifier::evaluate(float *result, int x, int y) const
+bool objed::CascadeClassifier::evaluate(float *result, int x, int y, DebugInfo *debugInfo) const
 {
   switch(clList.size())
   {
     case 0: return false;
-    case 1: return evaluate1(result, x, y);
-    case 2: return evaluate2(result, x, y);
-    case 3: return evaluate3(result, x, y);
-    case 4: return evaluate4(result, x, y);
-    case 5: return evaluate5(result, x, y);
-    default: return evaluateN(result, x, y);
+    case 1: return evaluate1(result, x, y, debugInfo);
+    case 2: return evaluate2(result, x, y, debugInfo);
+    case 3: return evaluate3(result, x, y, debugInfo);
+    case 4: return evaluate4(result, x, y, debugInfo);
+    case 5: return evaluate5(result, x, y, debugInfo);
+    default: return evaluateN(result, x, y, debugInfo);
   }
 }
 
@@ -126,92 +126,93 @@ Json::Value objed::CascadeClassifier::serialize() const
   return data;
 }
 
-bool objed::CascadeClassifier::evaluate1(float *result, int x, int y) const
+bool objed::CascadeClassifier::evaluate1(float *result, int x, int y, DebugInfo *debugInfo) const
 {
   assert(clList.size() >= 1);
-  return clList[0]->evaluate(result, x, y);
+
+  return clList[0]->evaluate(result, x, y, debugInfo);
 }
 
-bool objed::CascadeClassifier::evaluate2(float *result, int x, int y) const
+bool objed::CascadeClassifier::evaluate2(float *result, int x, int y, DebugInfo *debugInfo) const
 {
   assert(clList.size() >= 2);
   bool ok = false;
 
-  ok = clList[0]->evaluate(result, x, y);
+  ok = clList[0]->evaluate(result, x, y, debugInfo);
   if (ok == false || *result < 0.0)
     return ok;
 
-  return clList[1]->evaluate(result, x, y);
+  return clList[1]->evaluate(result, x, y, debugInfo);
 }
 
-bool objed::CascadeClassifier::evaluate3(float *result, int x, int y) const
+bool objed::CascadeClassifier::evaluate3(float *result, int x, int y, DebugInfo *debugInfo) const
 {
   assert(clList.size() >= 3);
   bool ok = false;
 
-  ok = clList[0]->evaluate(result, x, y);
+  ok = clList[0]->evaluate(result, x, y, debugInfo);
   if (ok == false || *result < 0.0)
     return ok;
 
-  ok = clList[1]->evaluate(result, x, y);
+  ok = clList[1]->evaluate(result, x, y, debugInfo);
   if (ok == false || *result < 0.0)
     return ok;
 
-  return clList[2]->evaluate(result, x, y);
+  return clList[2]->evaluate(result, x, y, debugInfo);
 }
 
-bool objed::CascadeClassifier::evaluate4(float *result, int x, int y) const
+bool objed::CascadeClassifier::evaluate4(float *result, int x, int y, DebugInfo *debugInfo) const
 {
   assert(clList.size() >= 4);
   bool ok = false;
 
-  ok = clList[0]->evaluate(result, x, y);
+  ok = clList[0]->evaluate(result, x, y, debugInfo);
   if (ok == false || *result < 0.0)
     return ok;
 
-  ok = clList[1]->evaluate(result, x, y);
+  ok = clList[1]->evaluate(result, x, y, debugInfo);
   if (ok == false || *result < 0.0)
     return ok;
 
-  ok = clList[2]->evaluate(result, x, y);
+  ok = clList[2]->evaluate(result, x, y, debugInfo);
   if (ok == false || *result < 0.0)
     return ok;
 
-  return clList[3]->evaluate(result, x, y);
+  return clList[3]->evaluate(result, x, y, debugInfo);
 }
 
-bool objed::CascadeClassifier::evaluate5(float *result, int x, int y) const
+bool objed::CascadeClassifier::evaluate5(float *result, int x, int y, DebugInfo *debugInfo) const
 {
   assert(clList.size() >= 5);
   bool ok = false;
 
-  ok = clList[0]->evaluate(result, x, y);
+  ok = clList[0]->evaluate(result, x, y, debugInfo);
   if (ok == false || *result < 0.0)
     return ok;
 
-  ok = clList[1]->evaluate(result, x, y);
+  ok = clList[1]->evaluate(result, x, y, debugInfo);
   if (ok == false || *result < 0.0)
     return ok;
 
-  ok = clList[2]->evaluate(result, x, y);
+  ok = clList[2]->evaluate(result, x, y, debugInfo);
   if (ok == false || *result < 0.0)
     return ok;
 
-  ok = clList[3]->evaluate(result, x, y);
+  ok = clList[3]->evaluate(result, x, y, debugInfo);
   if (ok == false || *result < 0.0)
     return ok;
 
-  return clList[4]->evaluate(result, x, y);
+  return clList[4]->evaluate(result, x, y, debugInfo);
 }
 
-bool objed::CascadeClassifier::evaluateN(float *result, int x, int y) const
+bool objed::CascadeClassifier::evaluateN(float *result, int x, int y, DebugInfo *debugInfo) const
 {
   assert(clList.size() >= 6);
   *result = objed::epsilon;
   bool ok = true;
 
   for (size_t i = 0; i < clList.size() && *result > 0.0; i++)
-    ok &= clList[i]->evaluate(result, x, y);
+    ok &= clList[i]->evaluate(result, x, y, debugInfo);
 
   return ok;
 }

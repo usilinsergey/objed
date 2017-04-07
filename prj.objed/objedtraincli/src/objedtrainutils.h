@@ -88,7 +88,7 @@ public:
   virtual int width() const;
   virtual int height() const;
   virtual bool prepare(objed::ImagePool *imagePool);
-  virtual bool evaluate(float *result, int x, int y) const;
+  virtual bool evaluate(float *result, int x, int y, objed::DebugInfo *debugInfo) const;
   virtual Json::Value serialize() const;
   virtual std::string type() const;
   virtual objed::Classifier * clone() const;

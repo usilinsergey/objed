@@ -101,7 +101,7 @@ bool objed::LinearClassifier::prepare(ImagePool *imagePool)
   return ok;
 }
 
-bool objed::LinearClassifier::evaluate(float *result, int x, int y) const
+bool objed::LinearClassifier::evaluate(float *result, int x, int y, DebugInfo *debugInfo) const
 {
   bool ok = true;
   float clResult = 0.0;
@@ -109,10 +109,11 @@ bool objed::LinearClassifier::evaluate(float *result, int x, int y) const
 
   for (size_t i = 0; i < clList.size(); i++)
   {
-    ok &= clList[i]->evaluate(&clResult, x, y);
+    ok &= clList[i]->evaluate(&clResult, x, y, debugInfo);
     totalResult += alphaList[i] * clResult;
   }
 
+  INCREASE_SC_COUNT(debugInfo);
   *result = totalResult;
   return ok;
 }

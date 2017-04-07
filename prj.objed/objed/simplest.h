@@ -36,6 +36,7 @@ either expressed or implied, of copyright holders.
 #include <utility>
 #include <vector>
 #include <string>
+#include <map>
 
 namespace objed
 {

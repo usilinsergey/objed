@@ -96,7 +96,7 @@ bool objed::ParallelClassifier::prepare(ImagePool *imagePool)
   return ok;
 }
 
-bool objed::ParallelClassifier::evaluate(float *result, int x, int y) const
+bool objed::ParallelClassifier::evaluate(float *result, int x, int y, DebugInfo *debugInfo) const
 {
   switch(clList.size())
   {

@@ -75,13 +75,13 @@ objed::MultiDetector::~MultiDetector()
     objed::Detector::destroy(detectorList[i]);
 }
 
-objed::DetectionList objed::MultiDetector::detect(IplImage *image)
+objed::DetectionList objed::MultiDetector::detect(IplImage *image, DebugInfo *debugInfo)
 {
   DetectionList rawDetectionList;
 
   for (size_t i = 0; i < detectorList.size(); i++)
   {
-    DetectionList d = detectorList[i]->detect(image);
+    DetectionList d = detectorList[i]->detect(image, debugInfo);
     for (size_t j = 0; j < d.size(); j++)
       rawDetectionList.push_back(d[j]);
   }

@@ -52,15 +52,15 @@ namespace objed
     virtual int width() const;
     virtual int height() const;
     virtual bool prepare(ImagePool *imagePool);
-    virtual bool evaluate(float *result, int x, int y) const;
+    virtual bool evaluate(float *result, int x, int y, DebugInfo *debugInfo) const;
     virtual Json::Value serialize() const;
     virtual Classifier * clone() const;
 
   private:
-    bool evaluateBoth(float *result, int x, int y) const;
-    bool evaluateLeft(float *result, int x, int y) const;
-    bool evaluateRight(float *result, int x, int y) const;
-    bool evaluateNone(float *result, int x, int y) const;
+    bool evaluateBoth(float *result, int x, int y, DebugInfo *debugInfo) const;
+    bool evaluateLeft(float *result, int x, int y, DebugInfo *debugInfo) const;
+    bool evaluateRight(float *result, int x, int y, DebugInfo *debugInfo) const;
+    bool evaluateNone(float *result, int x, int y, DebugInfo *debugInfo) const;
 
   public:
     int clWidth, clHeight;

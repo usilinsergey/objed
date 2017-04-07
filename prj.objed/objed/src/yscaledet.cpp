@@ -89,10 +89,14 @@ objed::YScaleDetector::~YScaleDetector()
   objed::Classifier::destroy(classifier);
 }
 
-objed::DetectionList objed::YScaleDetector::detect(IplImage *image)
+objed::DetectionList objed::YScaleDetector::detect(IplImage *image, DebugInfo *debugInfo)
 {
   if (imagePool == 0 || classifier == 0 || image == 0)
     return DetectionList();
+
+  DebugInfo *clDebugInfo = 0;
+  if (debugInfo != nullptr)
+    clDebugInfo = new DebugInfo();
 
   // scale = k * y + b
   assert(std::abs(y1 - y0) > std::numeric_limits<double>::epsilon());
@@ -138,8 +142,11 @@ objed::DetectionList objed::YScaleDetector::detect(IplImage *image)
     {
       for (int x = clWd2; x < scaledRegionWidth - clWd2; x += xStep)
       {
+        if (clDebugInfo != nullptr)
+          clDebugInfo->int_data.clear();
+
         float result = 0.0;
-        if (classifier->evaluate(&result, x, y) && result > 0)
+        if (classifier->evaluate(&result, x, y, clDebugInfo) && result > 0)
         {
           Detection rawDetection;
           rawDetection.power = 1;
@@ -149,12 +156,30 @@ objed::DetectionList objed::YScaleDetector::detect(IplImage *image)
           rawDetection.height = round((clHt - topMargin - bottomMargin) * scale);
           rawDetectionList.push_back(rawDetection);
         }
+
+        if (debugInfo != nullptr)
+        {
+          int outputLevel = clDebugInfo->int_data[Classifier::DBG_SC_COUNT];
+          if (debugInfo->int_data.find(Detector::DBG_MIN_SC_COUNT) != debugInfo->int_data.end())
+            debugInfo->int_data[Detector::DBG_MIN_SC_COUNT] = std::min(outputLevel, debugInfo->int_data[Detector::DBG_MIN_SC_COUNT]);
+          else
+            debugInfo->int_data[Detector::DBG_MIN_SC_COUNT] = outputLevel;
+          if (debugInfo->int_data.find(Detector::DBG_MAX_SC_COUNT) != debugInfo->int_data.end())
+            debugInfo->int_data[Detector::DBG_MAX_SC_COUNT] = std::max(outputLevel, debugInfo->int_data[Detector::DBG_MAX_SC_COUNT]);
+          else
+            debugInfo->int_data[Detector::DBG_MAX_SC_COUNT] = outputLevel;
+          debugInfo->int_data[Detector::DBG_TOTAL_SC_COUNT] += outputLevel;
+          debugInfo->int_data[Detector::DBG_EVALUATION_COUNT]++;
+        }
       }
     }
 
     cvReleaseImage(&scaledRegion);
     cvReleaseImageHeader(&region);
   }
+
+  if (clDebugInfo != nullptr)
+    delete clDebugInfo;
 
   DetectionList clusteredDetectionList = objed::cluster(rawDetectionList, overlap);
   return mergeIncluded == true ? objed::mergeIncluded(clusteredDetectionList) : clusteredDetectionList;

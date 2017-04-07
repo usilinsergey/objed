@@ -43,6 +43,9 @@ either expressed or implied, of copyright holders.
 
 namespace objed
 {
+#define INCREASE_SC_COUNT(debugInfo) \
+  if (debugInfo != nullptr) debugInfo->int_data[Classifier::DBG_SC_COUNT]++;
+
   template<class T> Json::Value rectToData(const Rect<T> &rect);
 
   template<class T> Rect<T> dataToRect(const Json::Value &data);

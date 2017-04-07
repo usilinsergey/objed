@@ -49,7 +49,7 @@ namespace objed
     virtual ~YScaleDetector();
 
   public:
-    virtual DetectionList detect(IplImage *image);
+    virtual DetectionList detect(IplImage *image, DebugInfo *debugInfo);
 
     virtual Detector * clone() const;
 

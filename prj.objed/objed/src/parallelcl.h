@@ -54,7 +54,7 @@ namespace objed
     virtual int width() const;
     virtual int height() const;
     virtual bool prepare(ImagePool *imagePool);
-    virtual bool evaluate(float *result, int x, int y) const;
+    virtual bool evaluate(float *result, int x, int y, DebugInfo *debugInfo) const;
     virtual Json::Value serialize() const;
     virtual Classifier * clone() const;
 

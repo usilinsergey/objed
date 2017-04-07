@@ -488,12 +488,12 @@ bool ParityCascadeClassifier::prepare(objed::ImagePool *imagePool)
   return ok;
 }
 
-bool ParityCascadeClassifier::evaluate(float *result, int x, int y) const
+bool ParityCascadeClassifier::evaluate(float *result, int x, int y, objed::DebugInfo *debugInfo) const
 {
   bool ok = true;
   for (size_t i = 0; i < clList.size(); i++)
   {
-    ok &= clList[i]->evaluate(result, x, y);
+    ok &= clList[i]->evaluate(result, x, y, debugInfo);
     *result *= parityList[i];
     if (*result < 0)
       return ok;

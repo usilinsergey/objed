@@ -52,7 +52,7 @@ namespace objed
     virtual ~LazyDetector();
 
   public:
-    virtual DetectionList detect(IplImage *image);
+    virtual DetectionList detect(IplImage *image, DebugInfo *debugInfo);
 
     virtual Detector * clone() const;
 

@@ -106,7 +106,7 @@ bool objed::RoiClassifier::prepare(ImagePool *imagePool)
   return baseImage != 0;
 }
 
-bool objed::RoiClassifier::evaluate(float *result, int x, int y) const
+bool objed::RoiClassifier::evaluate(float *result, int x, int y, DebugInfo *debugInfo) const
 {
   assert(result != 0);
   assert(baseImage != 0);

@@ -58,7 +58,7 @@ private:
   QString idealMarkupName;
   QString realMarkupName;
   bool saveRealMarkup;
-
+  bool saveDebugInfo;
   double threshold;
   int minPower;
 };

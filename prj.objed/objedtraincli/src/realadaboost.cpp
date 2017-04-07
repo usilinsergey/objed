@@ -262,10 +262,10 @@ void TrainScProcessor::trainScRealAdaBoostMax(objed::Classifier *&classifier, Sa
     {
       float maxResult = 0.0f;
       maxSc->prepare(posSample->imagePool);
-      maxSc->evaluate(&maxResult, x, y);
+      maxSc->evaluate(&maxResult, x, y, 0);
 
       float result = 0.0f;
-      sc->evaluate(&result, x, y);
+      sc->evaluate(&result, x, y, 0);
 
       if (result >= maxResult)
         currPositiveSamples.append(posSample);

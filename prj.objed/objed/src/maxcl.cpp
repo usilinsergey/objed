@@ -97,7 +97,7 @@ bool objed::MaxClassifier::prepare(ImagePool *imagePool)
   return ok;
 }
 
-bool objed::MaxClassifier::evaluate(float *result, int x, int y) const
+bool objed::MaxClassifier::evaluate(float *result, int x, int y, DebugInfo *debugInfo) const
 {
   bool ok = true;
   float clResult = 0.0;

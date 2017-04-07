@@ -92,7 +92,7 @@ bool objed::MeanClassifier::prepare(ImagePool *imagePool)
   return true;
 }
 
-bool objed::MeanClassifier::evaluate(float *result, int x, int y) const
+bool objed::MeanClassifier::evaluate(float *result, int x, int y, DebugInfo *debugInfo) const
 {
   assert(result != 0);
   assert(intervalList.size() == preprocList.size());

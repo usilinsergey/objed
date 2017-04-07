@@ -87,7 +87,7 @@ bool objed::Haar2StumpClassifier::prepare(ImagePool *imagePool)
   return integral != 0;
 }
 
-bool objed::Haar2StumpClassifier::evaluate(float *result, int x, int y) const
+bool objed::Haar2StumpClassifier::evaluate(float *result, int x, int y, DebugInfo *debugInfo) const
 {
   *result = compute(integral, x, y) > threshold ? values[0] : values[1];
   return true;

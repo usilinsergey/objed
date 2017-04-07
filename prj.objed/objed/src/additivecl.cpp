@@ -33,6 +33,9 @@ either expressed or implied, of copyright holders.
 
 #include <cassert>
 
+#define INCREASE_DBG_OUPUT_LEVEL \
+  if (debugInfo != 0) debugInfo->int_data[DBG_OUPUT_LEVEL]++;
+
 objed::AdditiveClassifier::AdditiveClassifier(int width, int height) :
 clWidth(width), clHeight(height)
 {
@@ -99,7 +102,7 @@ bool objed::AdditiveClassifier::prepare(ImagePool *imagePool)
   return ok;
 }
 
-bool objed::AdditiveClassifier::evaluate(float *result, int x, int y) const
+bool objed::AdditiveClassifier::evaluate(float *result, int x, int y, DebugInfo *debugInfo) const
 {
   bool ok = true;
   float clResult = 0.0;
@@ -108,10 +111,11 @@ bool objed::AdditiveClassifier::evaluate(float *result, int x, int y) const
   for (size_t i = 0; i < clList.size(); i++)
   {
     assert(clList[i] != 0);
-    ok &= clList[i]->evaluate(&clResult, x, y);
+    ok &= clList[i]->evaluate(&clResult, x, y, debugInfo);
     totalResult += clResult;
   }
 
+  INCREASE_SC_COUNT(debugInfo);
   *result = totalResult;
   return ok;
 }

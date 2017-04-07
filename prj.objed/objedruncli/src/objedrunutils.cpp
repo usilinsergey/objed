@@ -30,6 +30,8 @@ either expressed or implied, of copyright holders.
 */
 
 #include <QDateTime>
+#include <QJsonDocument>
+#include <QJsonObject>
 
 #include <objedutils/objedconsole.h>
 #include <objedutils/objedopenmp.h>
@@ -49,6 +51,7 @@ ObjedRunProcessor::ObjedRunProcessor(ObjedConfig *config) : saveRealMarkup(true)
   realMarkupName = QString("%0-%1").arg(config->value("IdealMarkupName").toString());
   realMarkupName = realMarkupName.arg(QDateTime::currentDateTime().toString("yyyyMMdd-hhmmss"));
   saveRealMarkup = config->value("SaveRealMarkup").toBool();
+  saveDebugInfo = config->value("SaveDebugInfo").toBool();
 
   minPower = config->value("MinimumPower").toInt();
   threshold = config->value("Threshold").toDouble();
@@ -72,7 +75,7 @@ void ObjedRunProcessor::processDataset(const QString &datasetPath)
   QDir realMarkupDir(datasetPath + "/" + realMarkupName);
   QDir idealMarkupDir(datasetPath + "/" + idealMarkupName);
 
-  if (saveRealMarkup == true)
+  if (saveRealMarkup == true || saveDebugInfo == true)
     QDir().mkpath(realMarkupDir.absolutePath());
 
   QStringList imageFilters = ObjedSys::imageFilters();
@@ -99,8 +102,11 @@ void ObjedRunProcessor::processDataset(const QString &datasetPath)
       QString imagePath = datasetDir.absoluteFilePath(imageName);
       QSharedPointer<ObjedImage> image = ObjedImage::create(imagePath);
 
+      objed::DebugInfo *debugInfo = nullptr;
+      if (saveDebugInfo) debugInfo = new objed::DebugInfo();
+
       objed::Detector *detector = detectorList[ObjedOpenMP::threadId()].data();
-      objed::DetectionList detectionList = detector->detect(image->image());
+      objed::DetectionList detectionList = detector->detect(image->image(), debugInfo);
 
       ObjedMarkup idealMarkup(idealMarkupDir.absoluteFilePath(imageName + ".json"));
       ObjedMarkup realMarkup(realMarkupDir.absoluteFilePath(imageName + ".json"), saveRealMarkup);
@@ -117,6 +123,22 @@ void ObjedRunProcessor::processDataset(const QString &datasetPath)
 
       if (saveRealMarkup == true)
         realMarkup.save();
+
+      if (saveDebugInfo)
+      {
+        Json::Value root;
+        root["evaluation_count"] = debugInfo->int_data[objed::Detector::DBG_EVALUATION_COUNT];
+        root["min_sc_count"] = debugInfo->int_data[objed::Detector::DBG_MIN_SC_COUNT];
+        root["max_sc_count"] = debugInfo->int_data[objed::Detector::DBG_MAX_SC_COUNT];
+        root["total_sc_count"] = debugInfo->int_data[objed::Detector::DBG_TOTAL_SC_COUNT];
+
+        QFile debugInfoFile(realMarkupDir.absoluteFilePath(imageName + ".dbg.json"));
+        if (debugInfoFile.open(QIODevice::WriteOnly))
+        {
+          Json::FastWriter writer;
+          debugInfoFile.write(writer.write(root).c_str());
+        }
+      }
 
       ObjedCompare::Result &result = resultList[ObjedOpenMP::threadId()];
       result += ObjedCompare::compare(realMarkup, idealMarkup, threshold);
@@ -135,4 +157,34 @@ void ObjedRunProcessor::processDataset(const QString &datasetPath)
     arg(result.falseNegative).arg(result.imageCount), 100);
   
   totalResult += result;
+
+  if (saveDebugInfo)
+  {
+    ObjedConsole::printInfo("Compile total CSV debug file for dataset");
+    QStringList dbgFileNameList = realMarkupDir.entryList(QStringList("*.dbg.json"));
+
+    QFile dbgFile(realMarkupDir.absoluteFilePath("dbg.csv"));
+    if (dbgFile.open(QIODevice::WriteOnly) == false)
+    {
+      ObjedConsole::printError("Cannot open dbg.csv");
+    }
+    else
+    {
+      QTextStream dbgFileStream(&dbgFile);
+      dbgFileStream << "evaluation_count;min_sc_count;max_sc_count;total_sc_count;" << endl;
+
+      foreach(QString dbgFileName, dbgFileNameList)
+      {
+        QFile dbgJsonFile(realMarkupDir.absoluteFilePath(dbgFileName));
+        dbgJsonFile.open(QIODevice::ReadOnly);
+
+        QJsonObject dbgJsonRoot = QJsonDocument::fromJson(dbgJsonFile.readAll()).object();
+        dbgFileStream << dbgJsonRoot["evaluation_count"].toInt() << ";";
+        dbgFileStream << dbgJsonRoot["min_sc_count"].toInt() << ";";
+        dbgFileStream << dbgJsonRoot["max_sc_count"].toInt() << ";";
+        dbgFileStream << dbgJsonRoot["total_sc_count"].toInt() << ";";
+        dbgFileStream << endl;
+      }
+    }
+  }
 }
