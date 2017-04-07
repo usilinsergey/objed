@@ -151,16 +151,18 @@ int Visualizer::visualizeCascade(QTextStream &out, objed::CascadeClassifier *cas
   if (cascade == 0 || cascade->clList.size() == 0)
     throw ObjedException("The cascade has no levels");
 
-  for (size_t i = 0; i < cascade->clList.size() - 1; i++)
+  size_t i = 0;
+  for (i = 0; i < cascade->clList.size() - 1; i++)
   {
     int wcCount = computeWCCount(cascade->clList[i]);
     out << QString("sc%0 [label = \"Sc (%1 Wc)\"];").arg(i).arg(wcCount) << endl;
     connect(out, QString("sc%0").arg(i), false);
     connect(out, QString("sc%0").arg(i), QString("sc%0").arg(i + 1), true);
   }
-
-  connect(out, QString("sc%0").arg(cascade->clList.size() - 1), false);
-  connect(out, QString("sc%0").arg(cascade->clList.size() - 1), true);
+  int wcCount = computeWCCount(cascade->clList[i]);
+  out << QString("sc%0 [label = \"Sc (%1 Wc)\"];").arg(i).arg(wcCount) << endl;
+  connect(out, QString("sc%0").arg(i), false);
+  connect(out, QString("sc%0").arg(i), true);
 
   return 0;
 }
